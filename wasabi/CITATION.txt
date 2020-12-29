@@ -1,0 +1,14 @@
+To cite Wasabi in publications, please use: 
+
+Veidenberg, A., Medlar, A., and Löytynoja, A. (2015). Wasabi: an integrated platform for evolutionary sequence analysis and data visualisation. Mol. Biol. Evol.
+
+A BibTeX entry for LaTeX users:
+
+@article{Veidenberg2015,
+author = {Veidenberg, Andres and Medlar, Alan and Löytynoja, Ari}, 
+title = {Wasabi: an integrated platform for evolutionary sequence analysis and data visualisation},
+year = {2015},
+doi = {10.1093/molbev/msv333},
+eprint = {http://http://mbe.oxfordjournals.org/cgi/content/short/msv333}, 
+journal = {Molecular Biology and Evolution} 
+}
