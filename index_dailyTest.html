@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110330647-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-110330647-1');
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-177112007-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-177112007-1');
+</script>
+
+ <style>
+
+ input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+
+ #outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
+}
+
+
+ #centered_img{
+		width:100%;
+		text-align:center;
+		text-align:center;
+	}
+
+li.header {
+    float: left;
+}
+
+li.header a, .dropbtn {
+    display: inline-block;
+	font-family: "Georgia", Times, serif;
+	font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.header a:hover, .dropdown:hover .dropbtn {
+    background-color: #88c187;
+}
+
+ .dropdown-submenu {
+    position: relative;
+	font-family: "Georgia", Times, serif;
+	font-size: 20px;
+	}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+	font-family: "Georgia", Times, serif;
+	font-size: 20px;
+	}
+
+.floating-box {
+	line-height: normal;
+	left: 100%;   
+    display: inline-block;
+    width: 100px;
+    height: normal;
+    margin: 4px;
+}
+
+</style>
+
+	<script type="text/javascript">
+        function insert(){
+            var src = document.getElementById("gamediv");
+            var img = document.createElement("img");
+            img.src = "images/OTT_Head3.jpg";
+            src.appendChild(img);
+        }
+
+		</script>
+
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="shortcut icon" href="images/tree_1.jpg"/>
+	
+    <title>OneTwoTree server</title>
+
+	<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+	<script src="/jquery-csv-master/src/jquery.csv.js"></script>
+    <script src='js/purl.js'></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+    <script>
+
+
+	$(document).ready(function(){
+
+		document.getElementById("JobToLoadID")
+			.addEventListener("keyup", function(event) {
+			event.preventDefault();
+			if (event.keyCode == 13) {
+				document.getElementById("LoadJob_button").click();
+			}
+		});	
+		
+		if ($.url().param('jobId')){
+			document.getElementById('editBoxOriginJobID').value = $.url().param('jobId');
+			getJobData();
+			window.location = '#rerun';
+		}
+		
+
+		$("input[name='Outgroup_Flag']").click(function() {
+			Outgroup_Flag = this.value;
+		});	
+
+		$("input[name='Tree_Method']").click(function() {
+			Tree_Method = this.value;
+		});	
+
+
+
+
+		//------------------------  OUTGROUP section show/hode conditions ------------------------
+
+
+		
+		$("#NameDataBaseDivNCBI").show();
+		$("#NameDataBaseDivAll").hide();
+		
+		$("#clk_mod_mb").show();
+		$("#clk_mod_rlx").show();
+		$("#clk_mod_mb_uni").hide();
+		$("#clk_mod_rlx_uni").hide();
+
+		//$("#divOutgroupUser2").hide();
+		document.getElementById("Outgroup_User").disabled=true;
+		document.getElementById("UltraMetricFlag").disabled=true;
+		document.getElementById("NodeDateMethod").disabled=true;
+		document.getElementById("NodeDateSection").disabled=true;
+		document.getElementById("NodeDateInputFile").disabled=true;
+		document.getElementById("files").disabled=true;
+		
+		//$("#ML_TimeDateMethod").hide();
+		$("#divExamlModelChoice").hide();
+
+		$('input[type=radio][name=NameResType]').change(function() {
+		
+			if(this.value == "None"){
+					$("#NameDataBaseDivNCBI").show();
+					$("#NameDataBaseDivAll").hide();
+			
+			}else{
+					$("#NameDataBaseDivNCBI").hide();
+					$("#NameDataBaseDivAll").show();
+			}
+			
+		});
+		
+
+		$('input[type=radio][name=Outgroup_Flag]').change(function() {
+			//var out_flag = $('input[type=radio][name=Outgroup_Flag]').val();
+			
+			if (this.value == 'Single')
+			{
+				alert('Please note that choosing this option will increase running time extensively');
+				//$("#divOutgroupUser2").hide();
+				document.getElementById("Outgroup_User").disabled=true;
+				document.getElementById("UltraMetricFlag").value = "No";
+				$('#clock_model').on('change', function() {
+					document.getElementById("NodeDateSection").disabled=true;		
+					document.getElementById("NodeDateInputFile").disabled=true;		
+					document.getElementById("files").disabled=true;		
+				});
+				//Note the user that he needs make sure the outgroup is drawn correctly since Examl doesn't do that
+				var tree_meth = $('#Tree_Method').val();
+				if (tree_meth == 'Examl'){
+					$('#myModal').find('.modal-header').html('<p>Examl with outgroup selection (automatic selection/user defined)</p>');
+					$('#myModal').find('.modal-body').html('<p>Please make sure to root the tree using a tree annotator</p>');
+					$("#myModal").modal();
+				}
+			}
+
+			if(this.value == 'User')
+			{
+				//$("#divOutgroupUser2").show();
+				document.getElementById("Outgroup_User").disabled=false;
+				document.getElementById("UltraMetricFlag").value = "No";
+				$('#clock_model').on('change', function() {
+					document.getElementById("NodeDateSection").disabled=true;		
+					document.getElementById("NodeDateInputFile").disabled=true;		
+					document.getElementById("files").disabled=true;		
+				});
+				//Note the user that he needs make sure the outgroup is drawn correctly since Examl doesn't do that
+				var tree_meth = $('#Tree_Method').val();
+				if (tree_meth == 'Examl'){
+					$('#myModal').find('.modal-header').html('<p>Examl with outgroup selection (automatic selection/user defined)</p>');
+					$('#myModal').find('.modal-body').html('<p>Please make sure to root the tree using a tree annotator</p>');
+					$("#myModal").modal();
+				}
+			}
+
+			if (this.value == 'None') 
+			{
+				$("#divOutgroupUser1").hide();
+				document.getElementById("Outgroup_User").disabled=true;
+				document.getElementById("UltraMetricFlag").value = "No";
+				document.getElementById("UltraMetricFlag").disabled=true;
+				document.getElementById("NodeDateMethod").disabled=true;
+				document.getElementById("NodeDateSection").disabled=true;
+				document.getElementById("NodeDateInputFile").disabled=true;
+				document.getElementById("files").disabled=true;
+				//$("#ML_TimeDateMethod").hide();
+			}
+			else if (this.value == 'Single' || this.value == 'User')
+			{ 
+						$("#divOutgroupUser1").hide();
+						//$("#divOutgroupUser2").hide();
+						document.getElementById("UltraMetricFlag").disabled=false;
+						document.getElementById("NodeDateSection").disabled=true;
+						document.getElementById("NodeDateInputFile").disabled=true;
+						document.getElementById("files").disabled=true;
+						document.getElementById("ML_TimeDateMethod").disabled=true;
+						//Check if Examl is chosen and then present this message:
+						//Note the user that he needs make sure the outgroup is drawn correctly since Examl doesn't do that
+						var tree_meth = $('#Tree_Method').val();
+						if (tree_meth == 'Examl'){
+							$('#myModal').find('.modal-header').html('<p>Examl with outgroup selection (automatic selection/user defined)</p>');
+							$('#myModal').find('.modal-body').html('<p>Please make sure to root the tree using a tree annotator</p>');
+							$("#myModal").modal();
+						}
+
+						
+			} 
+			
+			
+		});
+		
+
+		// ----------------------------  TREE Method selection chnage ----------------------------------
+		$('#Tree_Method').on('change', function() {
+
+		outgroup_flag_val = $( "input[type=radio][name=Outgroup_Flag]:checked" ).val();
+		
+		if ( this.value == 'MrBayes')
+		  {
+				if (outgroup_flag_val != 'None') {
+					document.getElementById("UltraMetricFlag").disabled=false;
+
+					$("#divMrBayesModelChoice").show();
+					$("#divRaxmlModelChoice").hide();
+					$("#divExamlModelChoice").hide();
+					$("#divSelectMrBayes").show();				
+					$("#divSelectRAxML").hide();
+					$("#divSelectExaML").hide();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("files").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+				} else {
+					$("#divMrBayesModelChoice").show();
+					$("#divRaxmlModelChoice").hide();
+					$("#divExamlModelChoice").hide();
+					$("#divSelectMrBayes").show();				
+					$("#divSelectRAxML").hide();
+					$("#divSelectExaML").hide();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("files").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+					//document.getElementById("UltraMetricFlag").disabled=false;
+				}
+			
+		  }
+		  
+		  if ( this.value == 'RAxML')
+		  {
+			//$('input[type=radio][name=Outgroup_Flag]').change(function() {
+				if (outgroup_flag_val != 'None') {
+					document.getElementById("UltraMetricFlag").disabled=false;
+
+					$("#divMrBayesModelChoice").hide();
+					$("#divRaxmlModelChoice").show();
+					$("#divExamlModelChoice").hide();
+					$("#divSelectMrBayes").hide();				
+					$("#divSelectRAxML").show();
+					$("#divSelectExaML").hide();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+				} else {
+					$("#divMrBayesModelChoice").hide();
+					$("#divRaxmlModelChoice").show();
+					$("#divExamlModelChoice").hide();
+					$("#divSelectMrBayes").hide();				
+					$("#divSelectRAxML").show();
+					$("#divSelectExaML").hide();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("files").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+					//document.getElementById("UltraMetricFlag").disabled=false;
+				}
+
+		  }
+
+		  if ( this.value == 'ExaML')
+		  {
+			//$('input[type=radio][name=Outgroup_Flag]').change(function() {
+				if (outgroup_flag_val != 'None') {
+					document.getElementById("UltraMetricFlag").disabled=false;
+
+					$("#divMrBayesModelChoice").hide();
+					$("#divRaxmlModelChoice").hide();
+					$("#divExamlModelChoice").show();
+					$("#divSelectMrBayes").hide();				
+					$("#divSelectRAxML").show();
+					$("#divSelectExaML").hide();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("files").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+					//Note the user that he needs make sure the outgroup is drawn correctly since Examl doesn't do that
+					$('#myModal').find('.modal-header').html('<p>Examl with outgroup selection (automatic selection/user defined)</p>');
+					$('#myModal').find('.modal-body').html('<p>Please make sure to root the tree using a tree annotator</p>');
+					$("#myModal").modal();
+	
+					
+					
+				} else {
+					$("#divMrBayesModelChoice").hide();
+					$("#divRaxmlModelChoice").hide();
+					$("#divExamlModelChoice").show();
+					$("#divSelectMrBayes").hide();				
+					$("#divSelectRAxML").hide();
+					$("#divSelectExaML").show();
+					document.getElementById("NodeDateSection").disabled=true;
+					document.getElementById("NodeDateInputFile").disabled=true;
+					document.getElementById("files").disabled=true;
+					document.getElementById("ConstraintNewick").value = "";
+					document.getElementById("UltraMetricFlag").value = "No";
+					document.getElementById("NodeDateMethod").disabled=true;
+					document.getElementById("clock_model").value = "Unconstrained";
+					//document.getElementById("UltraMetricFlag").disabled=false;
+				}
+
+		  }
+			  
+		  
+		});
+
+		//-------------------------------------------------------------------------------------
+
+		$('input[type=radio][name=Use_BootS_RxOn]').change(function() {
+	   
+			if (this.value == 'Off') 
+			{ 
+				$("#Raxml_BootS_vals").hide();
+				$("#Raxml_BootsNum_name").hide();
+				
+			}
+			else
+			{ 
+				$("#Raxml_BootS_vals").show();
+				$("#Raxml_BootsNum_name").show();
+			}
+		});
+		
+		$('input[type=radio][name=Use_BootS_ExOn]').change(function() {
+	   
+			if (this.value == 'Off') 
+			{ 
+				$("#Examl_BootS_vals").hide();
+				$("#Examl_BootsNum_name").hide();
+				
+			}
+			else
+			{ 
+				$("#Examl_BootS_vals").show();
+				$("#Examl_BootsNum_name").show();
+			}
+		});	
+	
+
+		$("#addedLines").hide();
+		//$('#SpeciesDescendants').change(function() {
+	    //
+		//	if (this.value == 'No') 
+		//	{ 
+		//		$("#addedLines").hide();
+		//	}
+		//	else
+		//	{ 
+		//		$("#addedLines").show();
+		//	}
+		//});	
+	
+	
+		$('#FilterMSA_Method').on('change', function() {
+	
+		  if ( this.value == 'None')
+		  {
+			$("#divNone").show();
+			$("#divGUIDANCE").hide();
+			$("#divTrimal1").hide();
+			$("#divGuidance1").hide();
+			$("#divTrimal2").hide();
+			$("#div_gBlocks1").hide();
+			$("#div_gBlocks2").hide();
+		  }
+	
+		  if ( this.value == 'GUIDANCE')
+		  {
+			$('#myModal').find('.modal-header').html('<font color=red><b>GUIDANCE may slow OneTwoTree down<b><br></font>');
+			$('#myModal').find('.modal-body').html('<p>Running GUIDANCE may slow OneTwoTree down,especially in case of large sets of sequences.(Our default run does not include Guidance).</p>');
+			$("#myModal").modal();
+	
+			//$('#FilterMSA_Method').confirmation();
+			$("#divNone").hide();
+			$("#divGUIDANCE").show();
+			$("#divGuidance1").show();
+			$("#divTrimal1").hide();
+			$("#divTrimal2").hide();
+			$("#div_gBlocks1").hide();
+			$("#div_gBlocks2").hide();
+	
+		  }
+	
+		  if ( this.value == 'Trimal')
+		  {
+			$("#divNone").hide();
+			$("#divGUIDANCE").hide();
+			$("#divGuidance1").hide();
+			$("#divTrimal1").show();
+			$("#divTrimal2").show();
+			$("#div_gBlocks1").hide();
+			$("#div_gBlocks2").hide();
+		  }
+	
+		  if ( this.value == 'gBlocks')
+		  {
+			$("#divNone").hide();
+			$("#divGUIDANCE").hide();
+			$("#divGuidance1").hide();
+			$("#divTrimal1").hide();
+			$("#divTrimal2").hide();
+			$("#div_gBlocks1").show();
+			$("#div_gBlocks2").show();
+		  }
+
+		 });
+
+		$("#divOrthoBC1").hide();
+		$("#divOrthoBC2").hide();
+
+		 $('#ClusteringMethod').on('change', function() {
+		  if ( this.value == 'None')
+		  {
+			$("#divOrthoOM1").show();
+			$("#divOrthoOM2").show();
+			$("#divOrthoBC1").hide();
+			$("#divOrthoBC2").hide();
+			document.getElementById("BC_percentIdentity").value = "0";
+			document.getElementById("BC_CoverageLength").value = "0";
+		  }
+
+		  if ( this.value == 'Ortho')
+		  {
+			$("#divOrthoOM1").show();
+			$("#divOrthoOM2").show();
+			$("#divOrthoBC1").hide();
+			$("#divOrthoBC2").hide();
+			document.getElementById("BC_percentIdentity").value = "60";
+			document.getElementById("BC_CoverageLength").value = "0.9";
+		
+		  }
+		  if ( this.value == 'BlastClust')
+		  {
+			$("#divOrthoBC1").show();
+			$("#divOrthoBC2").show();
+			$("#divOrthoOM1").hide();
+			$("#divOrthoOM2").hide();
+			document.getElementById("orthoSeq_Ratio").value = "0.5";
+			document.getElementById("Ortho_Inflation").value = "1.5";
+			}
+		});			
+		
+
+				
+		$('#MSA_Software').on('change', function() {
+		  if ( this.value == 'MAFFT')
+		  {
+			$("#divMAFFT1").show();
+			$("#divMAFFT2").show();
+			$("#divPRANK").hide();
+			$("#divClustalOmega").hide();
+		  }
+		  
+		  if ( this.value == 'PRANK')
+		  {
+			$("#divMAFFT1").hide();
+			$("#divMAFFT2").hide();
+			$("#divPRANK").show();
+			$("#divClustalOmega").hide();
+		  }
+		  
+		  if ( this.value == 'ClustalOmega')
+		  {
+			$("#divMAFFT1").hide();
+			$("#divMAFFT2").hide();
+			$("#divPRANK").hide();
+			$("#divClustalOmega").show();
+		  }
+		  
+		});
+					
+		NameRes_val = $( "input[type=radio][name=NameResType]:checked" ).val();
+		if (NameRes_val == 'None'){
+				$("#NR_DB_name").hide();
+		};
+
+		$('#UltraMetricFlag').on('change', function() {
+				if ( this.value ==  'Yes' ){
+					var tree_meth = $('#Tree_Method').val();  //$( "select#Tree_Method" ).val();
+					if (tree_meth != "MrBayes"){
+						document.getElementById("ML_TimeDateMethod").disabled=false;
+						document.getElementById("NodeDateSection").disabled=false;
+						document.getElementById("NodeDateMethod").disabled=false;
+						document.getElementById("NodeDateInputFile").disabled=false;
+						document.getElementById("files").disabled=false;
+
+						}else{
+						document.getElementById("ML_TimeDateMethod").disabled=false;
+						document.getElementById("NodeDateSection").disabled=false;
+						document.getElementById("NodeDateMethod").disabled=true;
+						document.getElementById("NodeDateInputFile").disabled=true;
+						document.getElementById("files").disabled=true;
+						$("#clk_mod_mb").hide();
+						$("#clk_mod_rlx").hide();
+						$("#clk_mod_mb_uni").show();
+						$("#clk_mod_rlx_uni").show();
+
+					}
+					
+				} else {
+					var tree_meth = $('#Tree_Method').val();  //$( "select#Tree_Method" ).val();
+					if (tree_meth != "MrBayes"){
+						document.getElementById("ML_TimeDateMethod").disabled=true;
+						document.getElementById("NodeDateSection").disabled=true;
+						document.getElementById("NodeDateMethod").disabled=true;
+						document.getElementById("NodeDateInputFile").disabled=true;
+						document.getElementById("files").disabled=true;
+
+						}else{
+						document.getElementById("ML_TimeDateMethod").disabled=false;
+						document.getElementById("NodeDateSection").disabled=false;
+						document.getElementById("NodeDateMethod").disabled=true;
+						document.getElementById("NodeDateInputFile").disabled=true;
+						document.getElementById("files").disabled=true;
+						$("#clk_mod_mb").show();
+						$("#clk_mod_rlx").show();
+						$("#clk_mod_mb_uni").hide();
+						$("#clk_mod_rlx_uni").hide();
+
+					}
+
+				}
+			});
+ 
+		
+		
+
+		$("#relaxed_branch_option").hide();
+		
+	
+		$('#clock_model').on('change', function() {  //Unconstrained Uniform Birthdeath Coalescence CPP TK02 IGR
+			
+			
+			if (this.value == 'Unconstrained' || this.value == "birthdeath" || this.value == "coalescence") {
+				document.getElementById("NodeDateSection").disabled=true;
+				document.getElementById("NodeDateInputFile").disabled=true;
+				document.getElementById("files").disabled=true;
+			} else {
+				//document.getElementById("NodeDateSection").disabled=false;	
+				$('input[type=radio][name=Outgroup_Flag]').change(function() {
+					if (this.value == 'None') {
+						document.getElementById("NodeDateSection").disabled=true;
+						document.getElementById("NodeDateInputFile").disabled=true;
+						document.getElementById("files").disabled=true;
+					} else {		
+
+						$("#relaxed_branch_option").hide();		
+						document.getElementById("NodeDateSection").disabled=false;	
+						document.getElementById("NodeDateInputFile").disabled=false;	
+						document.getElementById("files").disabled=false;	
+					} 		
+				});
+			}	
+		
+		
+			if (this.value == 'Unconstrained'){			$("#relaxed_branch_option").hide();	}
+			if ( this.value == 'uniform'){			$("#relaxed_branch_option").hide();	  }
+			if ( this.value == 'birthdeath'){		$("#relaxed_branch_option").hide();	}
+			if ( this.value == 'coalescence'){		$("#relaxed_branch_option").hide();	} 
+			if ( this.value == 'cpp' || this.value == 'tk02' || this.value == 'igr'){
+				$("#relaxed_branch_option").show();
+				document.getElementById("NodeDateSection").disabled=true;				
+				document.getElementById("NodeDateInputFile").disabled=true;				
+				document.getElementById("files").disabled=true;				
+				$('#relaxed_branch_option').on('change', function() {
+					if (this.value == 'uniform') {
+						outgroup_flag_val = $( "input[type=radio][name=Outgroup_Flag]:checked" ).val();
+						if (outgroup_flag_val == 'None'){
+							document.getElementById("NodeDateSection").disabled=true;
+							document.getElementById("NodeDateInputFile").disabled=true;
+							document.getElementById("files").disabled=true;
+						}
+						$('input[type=radio][name=Outgroup_Flag]').change(function() {
+							if (this.value == 'None') {
+								document.getElementById("NodeDateSection").disabled=true;
+								document.getElementById("NodeDateInputFile").disabled=true;
+								document.getElementById("files").disabled=true;
+							} else {		
+
+								$("#relaxed_branch_option").hide();		
+								document.getElementById("NodeDateSection").disabled=false;	
+								document.getElementById("NodeDateInputFile").disabled=false;	
+								document.getElementById("files").disabled=false;	
+							} 		
+						});
+
+					
+					} else {		
+						document.getElementById("NodeDateSection").disabled=true;	
+						document.getElementById("NodeDateInputFile").disabled=true;	
+						document.getElementById("files").disabled=true;	
+					} 		
+				});
+	
+			} 
+
+			
+			//if ( this.value == 'tk02'){				$("#relaxed_branch_option").show();	  } 
+			//if ( this.value == 'igr') {				$("#relaxed_branch_option").show();	  } 	  
+		});
+				
+		$('#relaxed_branch_option').on('change', function() {
+			if (this.value == 'uniform') {
+				document.getElementById("NodeDateSection").disabled=false;
+				document.getElementById("NodeDateInputFile").disabled=false;
+				document.getElementById("files").disabled=false;
+			} else {		
+				document.getElementById("NodeDateSection").disabled=true;	
+				document.getElementById("NodeDateInputFile").disabled=true;	
+				document.getElementById("files").disabled=true;	
+			} 		
+		});
+				
+		$('#inputText').keyup(function(){
+			$("#inputFile").val("");
+		});
+
+
+		
+		
+	//-------------------------------------------------------------		
+	// Load file of user into Text Area of node dating section:
+	function readTextFile(file, callback, encoding) {
+		var reader = new FileReader();
+		reader.addEventListener('load', function (e) {
+			callback(this.result);
+		});
+		if (encoding) reader.readAsText(file, encoding);
+		else reader.readAsText(file);
+	}
+
+	function fileChosen(input, output) {
+		if (input.files && input.files[0]) {
+			readTextFile(
+				input.files[0],
+				function (str) {
+					output.value = str;
+				}
+			);
+		}
+	}
+
+	$('#files').on('change', function () {
+		fileChosen(this, document.getElementById('NodeDateInputFile'));
+	});
+	$('#filesCT').on('change', function () {
+		fileChosen(this, document.getElementById('ConstraintNewick'));
+	});
+	$('#inputFile').on('change', function () {
+		fileChosen(this, document.getElementById('inputText'));
+	});
+
+	//-------------------------------------------------------------			
+
+		//$('#NodeDating').keyup(function(){
+		//	$("#NodeDateInputFile").val("");
+		//});
+        //
+		
+		
+});	// document ready end
+	
+
+	
+		
+        $(function () {
+            $("#popover1").popover({ container: 'body'});
+            $("#popover2").popover({ container: 'body'});
+            $("#popover3").popover({ container: 'body'});
+            $("#popover4").popover({ container: 'body'});
+            $("#popover5").popover({ container: 'body'});
+            $("#popover55").popover({ container: 'body'});
+            $("#popover6").popover({ container: 'body'});
+            $("#popover7").popover({ container: 'body'});
+            $("#popover8").popover({ container: 'body'});
+            $("#popover9").popover({ container: 'body'});
+            $("#popover10").popover({ container: 'body'});
+            $("#popover11").popover({ container: 'body'});
+            $("#popover12").popover({ container: 'body'});
+            $("#popover13").popover({ container: 'body'});
+            $("#popover14").popover({ container: 'body'});
+            $("#popover15").popover({ container: 'body'});
+            $("#popover16").popover({ container: 'body'});
+            $("#popover17").popover({ container: 'body'});
+            $("#popover18").popover({ container: 'body'});
+            $("#popover19").popover({ container: 'body'});
+            $("#popover20").popover({ container: 'body'});
+            $("#popover25").popover({ container: 'body'});
+            $("#popover26").popover({ container: 'body'});
+            $("#popover27").popover({ container: 'body'});
+            $("#popover28").popover({ container: 'body'});
+            $("#popover29").popover({ container: 'body'});
+             $("#popover30").popover({ container: 'body'});
+             $("#popover31").popover({ container: 'body'});
+             $("#popover32").popover({ container: 'body'});
+             $("#popover33").popover({ container: 'body'});
+             $("#popover34").popover({ container: 'body'});
+             $("#popover35").popover({ container: 'body'});
+             $("#popover36").popover({ container: 'body'});
+             $("#popover37").popover({ container: 'body'});
+             $("#popover38").popover({ container: 'body'});
+             $("#popover39").popover({ container: 'body'});
+             $("#popover40").popover({ container: 'body'});
+             $("#popover41").popover({ container: 'body'});
+             $("#popover42").popover({ container: 'body'});
+             $("#popover43").popover({ container: 'body'});
+             $("#popover44").popover({ container: 'body'});
+             $("#popover45").popover({ container: 'body'});
+			 $("#popover46").popover({ container: 'body'});
+             $("#popover47").popover({ container: 'body'});
+             $("#popover48").popover({ container: 'body'});
+             $("#popover49").popover({ container: 'body'});
+             $("#popover50").popover({ container: 'body'});
+             $("#popover51").popover({ container: 'body'});
+             $("#popover52").popover({ container: 'body'});
+             $("#popover53").popover({ container: 'body'});
+             $("#popover54").popover({ container: 'body'});
+             $("#popover55").popover({ container: 'body'});
+             $("#popover56").popover({ container: 'body'});
+             $("#popover57").popover({ container: 'body'});
+             $("#popover58").popover({ container: 'body'});
+             $("#popover59").popover({ container: 'body'});
+
+
+             $("#popover99").popover({ container: 'body'});
+       });
+
+        function myOnLoad(){
+        }
+		
+		var amountScrolled = 300;
+		$(window).scroll(function() {
+		if ( $(window).scrollTop() > amountScrolled ) {
+			$('a.back-to-top').fadeIn('slow');
+		} else {
+			$('a.back-to-top').fadeOut('slow');
+		}
+	    });	
+		
+
+			
+		function validateForm(){	
+			// verify there is input
+			var file				= document.forms["myForm"]["inputFile"].value;
+			var txt					= document.forms["myForm"]["inputText"].value;
+			var clustersSelected	= $('#divClustersTable input:checked').length;
+		
+			if ( (file == "") && (txt == "") && (clustersSelected == 0) ) 
+			{
+   		        $('#myModal').find('.modal-header').html('<b>No input entered<b><br>');
+				$('#myModal').find('.modal-body').html('<p>Please,<br>select your FASTA file,<br>or type your list of taxa,<br>or select at least one cluster to re-run.</p>');
+				$("#myModal").modal();
+			}
+
+			// form has input. Do a trick to add unchecked checkboxes values to params.txt
+			if(document.getElementById("include_Nuc").checked) {
+			    document.getElementById('include_Nuc_hidden').disabled = true;
+			}
+			
+			if(document.getElementById("include_Mt").checked) {
+			    document.getElementById('include_Mt_hidden').disabled = true;
+			}
+			
+			if(document.getElementById("include_CP").checked) {
+			    document.getElementById('include_CP_hidden').disabled = true;
+			}
+
+			if(document.getElementById("Filter_SubSp").checked) {
+			    document.getElementById('Filter_SubSp_hidden').disabled = true;
+			}
+            
+			if(document.getElementById("Filter_Hybrids").checked) {
+			    document.getElementById('Filter_Hybrids_hidden').disabled = true;
+			}
+            
+			if(document.getElementById("Merge_Subsp").checked) {
+			    document.getElementById('Merge_Subsp_hidden').disabled = true;
+			}
+            
+			if(document.getElementById("Filter_Unresolved").checked) {
+			    document.getElementById('Filter_Unresolved_hidden').disabled = true;
+			}
+
+
+			// gblocks related
+			if(document.getElementById("gb_SmallerBlocks").checked) {
+			    document.getElementById('gb_SmallerBlocks_hidden').disabled = true;
+				document.getElementById("gb_SmallerBlocks").value = 'true';
+			}
+
+			if(document.getElementById("gb_AllowGaps").checked) {
+			    document.getElementById('gb_AllowGaps_hidden').disabled = true;
+				document.getElementById("gb_AllowGaps").value = 'true';				
+			}
+			
+
+			if(document.getElementById("gb_LessStrictFlanking").checked) {
+			    document.getElementById('gb_LessStrictFlanking_hidden').disabled = true;
+				document.getElementById("gb_LessStrictFlanking").value = 'true';				
+			}
+			
+			if (document.getElementById('OriginJobID').value == "None"){
+				document.getElementById('OriginJobDir').value = "";
+			}
+			else{
+				document.getElementById('OriginJobDir').value = "/bioseq/data/results/oneTwoTree/" + document.getElementById('OriginJobID').value;			
+			}
+								
+			document.getElementById("date").value = new Date().toLocaleString();
+			
+			if ($('input[name=Outgroup_Flag]:checked').val() != "User"){
+				document.getElementById('Outgroup_User').value = "None";
+			}
+
+
+		}
+
+		
+
+
+// Load example function
+function loadExample(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://OneTwoTree.tau.ac.il/download/input_examples/example.txt",
+		onSuccess:function(response){
+			console.log("loadExample onSuccess");
+			$("#inputText").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("loadExample onFailure");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, example file was not loaded');
+			$("#myModal").modal();
+		}
+	}).send(); //Don't forget to send our request!
+		
+}
+
+
+// Load example function
+function loadNewickExample(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://OneTwoTree.tau.ac.il/download/input_examples/newick_.tre",
+		onSuccess:function(response){
+			console.log("loadNewickConstraint onSuccess");
+			$("#ConstraintNewick").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("loadNewickConstraint onFailure");
+			$('#myModal').find('.modal-header').html('<b>Newick constraint not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, Newick constraint tree file was not loaded');
+			$("#myModal").modal();
+		}
+	}).send(); //Don't forget to send our request!
+		
+}	
+	
+// Load example Node Dating function
+function loadNoadDateExample(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://OneTwoTree.tau.ac.il/download/input_examples/NodeDate_e.csv",
+		onSuccess:function(response){
+			console.log("loadNoadDating onSuccess");
+			$("#NodeDateInputFile").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("loadNoadDating onFailure");
+			$('#myModal').find('.modal-header').html('<b>Node Dating file not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, Node Dating file was not loaded');
+			$("#myModal").modal();
+		}
+	}).send(); //Don't forget to send our request!
+		
+}		
+
+function eraseText() {
+    document.getElementById("ConstraintNewick").value = "";
+}		
+
+function eraseNodeDateText() {
+    document.getElementById("NodeDateInputFile").value = "";
+}
+
+function eraseInputText() {
+    document.getElementById("inputText").value = "";
+}
+
+
+
+//  -------------   RERUN   ------------------
+	function parseOneParamFromResponse(param, response){
+		start	= response.indexOf(param)+param.length;
+		end		= start + response.substring(start).indexOf("\n");
+		return response.substring(start,end);
+	}
+
+	function load_params_file(userJobId){
+				var ajaxRequest = new Request({
+					url:"http://OneTwoTree.tau.ac.il/oneTwoTree_results/" + userJobId + "/params.txt",
+                
+					onSuccess:function(response){
+						// Running options:
+						param = "include_Nuc:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "on"){
+							$("#include_Nuc").attr('checked', true);
+						}else{
+							$("#include_Nuc").attr('checked', false);
+						}
+						param = "include_Mt:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "on"){
+							$("#include_Mt").attr('checked', true);
+						}else{
+							$("#include_Mt").attr('checked', false);
+						}
+						param = "include_CP:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "on"){
+							$("#include_CP").attr('checked', true);
+						}else{
+							$("#include_CP").attr('checked', false);
+						}
+						param = "ClusteringMethod:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "Ortho"){
+							document.getElementById("ClusteringMethod").options[0].selected=true;
+						} else {
+							document.getElementById("ClusteringMethod").options[1].selected=true;
+						}
+						param = "Seq_Ratio:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Seq_Ratio").val(vParam);
+						param = "Ortho_Inflation:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Ortho_Inflation").val(vParam);
+						param = "MSA_Software:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "MAFFT"){
+							document.getElementById("MSA_Software").options[0].selected=true;
+						} else {
+							document.getElementById("MSA_Software").options[1].selected=true;
+						}
+						param = "MAFFT_maxiterate:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#MAFFT_maxiterate").val(vParam);
+						param = "PairwiseAlignmentMethod:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#PairwiseAlignmentMethod").val(vParam);
+						param = "FilterMSA_Method:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "None"){
+							document.getElementById("FilterMSA_Method").options[0].selected=true;
+						} else if (vParam == "GUIDANCE"){
+							document.getElementById("FilterMSA_Method").options[1].selected=true;
+						} else if (vParam == "Trimal"){
+							document.getElementById("FilterMSA_Method").options[2].selected=true;
+						} else { // Gblocks
+							document.getElementById("FilterMSA_Method").options[3].selected=true;
+						}
+						param = "Guidance_RowCol:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Guidance_RowCol").val(vParam);
+						param = "Trimal_CutOff:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Trimal_CutOff").val(vParam);
+						param = "gb_SmallerBlocks:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#gb_SmallerBlocks").val(vParam);
+						param = "gb_AllowGaps:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#gb_AllowGaps").val(vParam);
+						param = "gb_LessStrictFlanking:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#gb_LessStrictFlanking").val(vParam);
+						param = "Tree_Method:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "RAxML"){
+							document.getElementById("Tree_Method").options[0].selected=true;
+						} else if (vParam == "MrBayes") { // Gblocks
+							$("#divMrBayesModelChoice").show();
+							$("#divRaxmlModelChoice").hide();
+							$("#divExamlModelChoice").hide();
+							$("#divSelectMrBayes").show();				
+							$("#divSelectRAxML").hide();
+							$("#divSelectExaML").hide();
+                
+							document.getElementById("Tree_Method").options[1].selected=true;
+							// If MrBayes then load other params as well:
+							param = "User_MrBayes_Model:";
+							vParam = parseOneParamFromResponse(param,response);
+							if (vParam == "None"){ document.getElementById("User_MrBayes_Model").options[0].selected=true;}
+							else if (vParam == "JC"){ document.getElementById("User_MrBayes_Model").options[1].selected=true;}
+							else if (vParam == "JC+I"){ document.getElementById("User_MrBayes_Model").options[2].selected=true;}
+							else if (vParam == "JC+G"){ document.getElementById("User_MrBayes_Model").options[3].selected=true;}
+							else if (vParam == "JC+I+G"){ document.getElementById("User_MrBayes_Model").options[4].selected=true;}
+							else if (vParam == "F81"){ document.getElementById("User_MrBayes_Model").options[5].selected=true;}
+							else if (vParam == "F81+I"){ document.getElementById("User_MrBayes_Model").options[6].selected=true;}
+							else if (vParam == "F81+G"){ document.getElementById("User_MrBayes_Model").options[7].selected=true;}
+							else if (vParam == "F81+I+G"){ document.getElementById("User_MrBayes_Model").options[8].selected=true;}
+							else if (vParam == "K80"){ document.getElementById("User_MrBayes_Model").options[9].selected=true;}
+							else if (vParam == "K80+I"){ document.getElementById("User_MrBayes_Model").options[10].selected=true;}
+							else if (vParam == "K80+G"){ document.getElementById("User_MrBayes_Model").options[11].selected=true;}
+							else if (vParam == "K80+I+G"){ document.getElementById("User_MrBayes_Model").options[12].selected=true;}
+							else if (vParam == "HKY"){ document.getElementById("User_MrBayes_Model").options[13].selected=true;}
+							else if (vParam == "HKY+I"){ document.getElementById("User_MrBayes_Model").options[14].selected=true;}
+							else if (vParam == "HKY+G"){ document.getElementById("User_MrBayes_Model").options[15].selected=true;}
+							else if (vParam == "HKY+I+G"){ document.getElementById("User_MrBayes_Model").options[16].selected=true;}
+							else if (vParam == "SYM"){ document.getElementById("User_MrBayes_Model").options[17].selected=true;}
+							else if (vParam == "SYM+I"){ document.getElementById("User_MrBayes_Model").options[18].selected=true;}
+							else if (vParam == "SYM+G"){ document.getElementById("User_MrBayes_Model").options[19].selected=true;}
+							else if (vParam == "SYM+I+G"){ document.getElementById("User_MrBayes_Model").options[20].selected=true;}
+							else if (vParam == "GTR"){ document.getElementById("User_MrBayes_Model").options[21].selected=true;}
+							else if (vParam == "GTR+I"){ document.getElementById("User_MrBayes_Model").options[22].selected=true;}
+							else if (vParam == "GTR+G"){ document.getElementById("User_MrBayes_Model").options[23].selected=true;}
+							else if (vParam == "GTR+I+G"){ document.getElementById("User_MrBayes_Model").options[24].selected=true;}						
+							
+							var relaxed_branch = 'no';
+							param = "clock_model:";
+							vParam = parseOneParamFromResponse(param,response);
+							if (vParam == "Unconstrained"){ document.getElementById("clock_model").options[0].selected=true;}						
+							else if (vParam == "uniform"){ document.getElementById("clock_model").options[1].selected=true;}						
+							else if (vParam == "birthdeath"){ document.getElementById("clock_model").options[2].selected=true;}						
+							else if (vParam == "coalescence"){ document.getElementById("clock_model").options[3].selected=true;}						
+							else if (vParam == "cpp"){ document.getElementById("clock_model").options[4].selected=true; 	relaxed_branch = 'yes';}						
+							else if (vParam == "tk02"){ document.getElementById("clock_model").options[5].selected=true;	relaxed_branch = 'yes';}						
+							else if (vParam == "igr"){ document.getElementById("clock_model").options[6].selected=true;  	relaxed_branch = 'yes';}						
+							if(relaxed_branch == 'yes'){
+								param = "relaxed_branch_option:";		// Need to check for which option it is used !!!
+								vParam = parseOneParamFromResponse(param,response);
+								if (vParam == "uniform") { document.getElementById("relaxed_branch_option").options[0].selected=true; }
+								else if (vParam == "birthdeath") { document.getElementById("relaxed_branch_option").options[1].selected=true; }
+								else  { document.getElementById("relaxed_branch_option").options[2].selected=true; }
+							}
+							
+							param = "ngen:";
+							vParam = parseOneParamFromResponse(param,response);
+							$("#ngen").val(vParam);
+							param = "samplefreq:";
+							vParam = parseOneParamFromResponse(param,response);
+							$("#samplefreq").val(vParam);
+							param = "nchains:";
+							vParam = parseOneParamFromResponse(param,response);
+							$("#nchains").val(vParam);
+							param = "burninFrac:";
+							vParam = parseOneParamFromResponse(param,response);
+							$("#burninFrac").val(vParam);
+							param = "checkFreq:";
+							vParam = parseOneParamFromResponse(param,response);
+							$("#checkFreq").val(vParam);
+                
+						} else { // ExaML
+							document.getElementById("Tree_Method").options[2].selected=true;
+						}
+						
+						param = "User_RAxML_Model:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#User_RAxML_Model").val(vParam);
+						param = "Use_BootS_RxOn:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Use_BootS_RxOn").val(vParam);
+						param = "Raxml_BootS_vals:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Raxml_BootS_vals").val(vParam);
+						param = "User_ExaML_Model:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#User_ExaML_Model").val(vParam);
+						param = "Use_BootS_ExOn:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Use_BootS_ExOn").val(vParam);
+						param = "Examl_BootS_vals:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#Examl_BootS_vals").val(vParam);
+						
+						param = "Tree_Type:";
+						vParam = parseOneParamFromResponse(param,response);
+						if (vParam == "ConcatTree"){ document.getElementById("Tree_Type").options[0].selected=true;}						
+						else if (vParam == "PerLocusTree"){ document.getElementById("Tree_Type").options[1].selected=true;}						
+						
+						param = "ConstraintNewick:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#ConstraintNewick").val(vParam);
+						//param = "SplitDiv:";
+						//vParam = parseOneParamFromResponse(param,response);
+						//$("#SplitDiv").val(vParam);
+						param = "MinAge:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#MinAge").val(vParam);
+						param = "MaxAge:";
+						vParam = parseOneParamFromResponse(param,response);
+						$("#MaxAge").val(vParam);
+						
+					}
+				}).send(); 
+	}
+
+
+// this func is called when user presses the rerun btn
+function getJobData(){
+	// init: clear div, get job num, clear choose file and load example
+	document.getElementById('divClustersTable').empty();
+	$("#divClustersTable").hide();
+	var userJobId = document.getElementById('editBoxOriginJobID').value;
+	$("#inputFile").val("");
+	$("#inputText").val("");
+	//$("#NodeDateInputFile").val("");
+	
+
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://OneTwoTree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/All_Clusters_data.csv",
+		onSuccess:function(response){
+
+			console.log("getJobData onSuccess");
+			document.getElementById('OriginJobID').value = userJobId;
+			document.getElementById('OriginJobDir').value = "/bioseq/data/results/oneTwoTree/" + userJobId;	
+			$("#divRerun").show();
+			$("#divRerunTxt").html("Re-run options for job " + userJobId + ":");
+			$("#divUplaodFile").hide();
+			$("#divOR").hide();
+			
+			$("#divRooted").hide();
+			$("#divClusteringTools").hide();
+			$("#divAlignmentOptions").hide();
+			
+			load_params_file(userJobId);
+			
+			// get csv data as objects
+			var data = $.csv.toObjects(response);
+			//console.log(data);
+			
+			// construct table
+			var html = '<div class="fontMedium">Check the clusters to re-run:</div>';
+			//html += '<td><input type="checkbox" name="Merge_Clusters"></td><th> Merge Clusters </th>';
+			html += '<table id="myDataTable" name="myDataTable" class="table table-hover table-responsive table-bordered table-sm rerunTable">';
+			html += '<thead>';
+				html += '<tr>';
+					//html += '<th id="idSelectAllCell"><input type="checkbox" id="idSelectAll" onclick="onSelectAll()"> Cluster</th>';
+					html += '<th id="idSelectAllCell"> Cluster</th>';
+					html += '<th>  Merge Cluster  </th>';
+					html += '<th>Description</th>';
+					html += '<th>Type</th>';
+					html += '<th width="12%">Median Length</th>';
+					html += '<th width="12%">Num of species</th>';
+					html += '<th>Included</th>';
+				html += '</tr>';
+			html += '</thead>';
+			
+			html += '<tbody>';
+			for (var i = 0; i < data.length; i++) {
+				html += '<tr>';
+				//html += '<td><input type="checkbox" name="cluster_' + data[i].ClusterID +'"> ' + data[i].ClusterID + '</td>';
+				html += '<td><input type="checkbox" name="cluster_' + data[i].ClusterID +'"';
+				if ( data[i].IncludedInConcat == 'yes'){
+					html += ' checked >' + data[i].ClusterID + '</td>';
+				} else {
+					html += '>' + data[i].ClusterID + '</td>';
+				}
+
+				html += '<td width="15%"><input type="checkbox" name="cluster_' + data[i].ClusterID +'"> ' + '  Merge to Cluster   ';
+				html +=	'<select name=\"Merge_' + data[i].ClusterID + '\">';
+				html +=	'<option value=\"None\">None</option>';				
+				//Add all clusters as merge options:
+				for (var clust_i=0; clust_i < data.length; clust_i++){
+					html 	+=	'<option value=\"'+data[clust_i].ClusterID+'\">' + data[clust_i].ClusterID  + '</option>';
+				}
+				html 	+=	'</select></td>';
+
+				html += '<td>' + data[i].Desc + '</td>';
+				html += '<td>' + data[i].Type + '</td>';					
+				html += '<td width="12%">' + data[i].length + '</td>';					
+				html += '<td width="12%">' + data[i].SpeciesCnt + '</td>';					
+				//html += '<td>' + data[i].SpeciesIds + '</td>';
+				html += '<td>' + data[i].IncludedInConcat + '</td>';					
+				html += '</tr>';
+			}
+			
+			html += '</tbody>';
+			html += '</table>';
+			
+			$('#divClustersTable').html(html);
+			
+			//getRerunTaxaList();
+			$('#myDataTable').DataTable( {
+				paging:		false, 
+				info:		false,
+				searching:	false,
+
+				//add these config to remove empty header
+				"bJQueryUI":true,
+				"sDom": 'lfrtip',
+				"order": [[0, "asc"]]
+			} );
+		},
+
+		onFailure:function(response){
+			console.log("getJobData onError");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+			$("#divUplaodFile").show();
+			$("#divOR").show();
+
+		}
+		
+
+	}).send(); //Don't forget to send our request!
+	
+}
+
+
+// this func is called when user presses the re-run btn
+function getRerunTaxaList(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+	  //url:"http://OneTwoTree.tau.ac.il/oneTwoTree_results/" + userJobId + "/userInput.txt",
+		url:"http://OneTwoTree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/FinalSpeciesList.txt", 
+		onSuccess:function(response){
+			console.log("getRerunTaxaList onSuccess");
+			$("#inputText").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("getRerunTaxaList onFailure");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, taxa list for result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+			return fail;
+		}
+	}).send(); //Don't forget to send our request!
+	
+}
+
+	function onChooseFile(){
+		document.getElementById('divClustersTable').empty();
+		document.getElementById('OriginJobID').value = "None";
+		$("#editBoxOriginJobID").val("");
+		$("#inputText").val("");
+		$("#divRerun").hide();
+	}
+
+	//function onNodeDateFile(){
+	//	$("#NodeDating").val("");
+	//}
+	
+	function onSelectAll() {
+		// get state - checked or not?
+		var state = document.getElementById("idSelectAll").checked;
+		// set all checkboxes in div to state
+		$("#divClustersTable :checkbox").prop('checked', state);
+		$('#idSelectAllCell').click();
+
+	}
+
+	function moveCursorToInputText() {
+		$("#inputText").focus();
+		$("#inputText").select();
+	}
+	
+    </script>
+
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  
+</head>
+<body onload="javascript:myOnLoad()">
+
+	<a href="#" class="back-to-top">Back to Top</a>
+
+	
+	<div class="header_img">
+	
+		<div id="gamediv">
+			<img src="images/OTT_Head3.jpg" style="max-width:100%;height:auto;">
+			<div id="load_jobid">
+				<input type="text" id="JobToLoadID" value="" placeholder="Enter your results ID"/>
+				<a href='' id="LoadJob_button" onclick="this.href='http://OneTwoTree.tau.ac.il/results.html?jobId='+document.getElementById('JobToLoadID').value+'&jobTitle=check'">Load previous results</a>
+
+			</div>
+		</div>
+		
+	</div>
+	
+	
+    <div class="container">
+	
+		<!-- Modal - to show msg -->
+		<div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+			  <div class="modal-dialog">
+
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal" align="center">Close</button>
+				</div>
+			  </div>
+			  
+			</div>
+		</div>
+	
+			
+			
+        <!-- Static navbar -->
+		 <ul class="header">
+		  <li class="header"><a class="header" href="index.html">Home</a></li>
+		  <li class="header"><a class="header" href="overview.html">Overview</a></li>
+		  <li class="header"><a class="header" href="openIssues.html">OpenIssues</a></li>
+		  <li class="header"><a class="header" href="download.html">Download</a></li>
+		  <li class="header"><a class="header" href="http://OneTwoTree.tau.ac.il/download/OTT_License.pdf">License</a></li>
+		  <li class="header"><a class="header" href="https://github.com/MayroseLab/OneTwoTree"><i class="fa fa-github">Github</i></a></li>
+		  <!--<li class="header"><a class="header" href="http://OneTwoTree.tau.ac.il/results.html?jobId=1510040551&jobTitle=Antirrhineae">Results</a></li>
+		  <!--<li class="header"><a class="header" href="results.html">Results</a></li>-->
+		  
+		</ul><p align="center"><font color="#1A1818" size="3.5">Prof. Itay Mayrose Lab - Plant Evolution, bioinformatics, & comparative genomics</font></p>
+		
+
+        <!-- jumbotron -->
+ 
+										
+	   <div class="jumbotron">
+
+         
+		 <!--p><font size=4 color="#DB0400" align="center"><b>IMPORTANT notification:</b></font></p>
+         <p><font size=4 color="#DB0400" align="center"><b>OneTwoTree is not generating the pdf tree file for the past 24hr. We are working to correct this issue.</b></font></p>
+         <p><font size=4 color="#DB0400" align="center"><b>All other results are produced as usual.</b></font></p>
+        <p><font size=4 color="#2225e1" align="center"><b>We apologize for the inconvenience </b></font></p--> 
+
+        <!--p><font size=4 color="#DB0400" align="center"><b>Due to maintenance operations to our cluster system, during Monday 6-7 Aug 2019 we expect some performance problems.</b></font></p>
+         <p><font size=4 color="#DB0400" align="center"><b> Due to maintenance operations (Dec 8-9 2019) we advise users not to submit new jobs until further notice.</b></font></p>
+          <p><font size=4 color="#DB0400" align="center"><b>We are sorry for the inconvenience.</b></font></p>-->
+        <!--<p><font size=4 color="#2225e1" align="center"><b>The server is up and running again.</b></font></p> 
+        <p><font size=4 color="#2225e1" align="center"><b>We apologize for the inconvenience </b></font></p>  -->
+
+			
+		  
+            <p>
+                <font color="#1A1818" size="3" align="center"> We are working on improving OneTwoTree for enhanced flexibility and a better user interface. 
+				<br>If you run into problems please email <a href="mailto:#"><i>evolseq@tauex.tau.ac.il</i></a> and specify the job ID.<br>
+				<!--<font color="#DB0400">Important notice: GUIDANCE is curently not functional on this site. We will update as soon as the problem is fixed.</font><br>-->
+                    <!--<br>If you haven't received any results within a few hours, please contact us and re-submit--> Thank you!
+                </font>
+            </p>
+
+				<!--<h4 align="center"><a href="https://github.com/MayroseLab/OneTwoTree"><i class="fa fa-github">Github</i></a></h4>
+				
+
+
+				<h4 align="center"><a href="http://OneTwoTree.tau.ac.il/download/OTT_License.pdf"><i> OneTwoTree® License  </i></a><a href="https://github.com/MayroseLab/OneTwoTree"><i class="fa fa-github">Github</i></a></h4>-->
+                 <h3 align="center"><a href="http://OneTwoTree.tau.ac.il/download/step-by-step.pdf"><i> How to use OneTwoTree® pipeline?</i></a><br>
+                    <font color="#1A1818" size="4" align="center"> When using OneTwoTree please cite us: Drori M, Rice A, Einhorn M, Chay O, Glick L, Mayrose I. 
+					OneTwoTree: An online tool for phylogeny reconstruction. Mol Ecol Resour. 2018;00:1–8. <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/1755-0998.12927"><i> https://doi.org/10.1111/1755-0998.12927</i></a> 
+					</font></h3>
+					<div id="demo" class="collapse">
+                        <p>add text here...</p>
+                        <br>
+                    </div>
+
+            <br>
+			<!--  fa fa-github -->
+										
+<!--				<form name="myForm" method="post" action="../cgi-bin/oneTwoTree.cgi" enctype="multipart/form-data" onsubmit="return validateForm()"> -->
+				<form name="myForm" method="post" action="../cgi-bin/oneTwoTree.cgi" enctype="multipart/form-data" onsubmit="return validateForm()">
+					
+
+
+
+
+					<div class="row rowOfer divOfer">
+							<div class="col-md-3 col-lg-3">Running options:</div>
+							<div class="col-md-9 col-lg-9 fontMedium">
+									<input type="radio" name="runningOptions" value="phylogeny reconstruction" 	required  checked="checked"	> Phylogeny reconstruction
+								<!--br><input type="radio" name="runningOptions" value="downloadSequences" 			required 					> Download sequences (fasta format)-->
+								<br><input type="radio" name="runningOptions" value="clustering" 					required 					> Obtain orthologous loci
+								<!--br><input type="radio" name="runningOptions" value="performAlignment" 				required 					> Perform alignment-->
+							</div>
+						</div>
+						
+						<br>
+					
+						<div class="divOfer" id="idUserInputDiv">
+							<p><b><font color="#428bca"><span class="glyphicon glyphicon glyphicon-list-alt"></span> Input</font></b><a id="popover99" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Input list should contain at most 20,000 species. Please contact us if you wish to run this tool on a higher number. Input taxa should belong to the following taxonomic groups: mam,inv,pln,pri,rod,vrt."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></p>
+							<p style="font-size:2vw;">
+								<div  id="divUplaodFile">
+									Upload a file with your list of TaxIDs/taxa names <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/" target="_blank">(see explenation on NCBI)</a>, or paste the list in the window (available only for: <br>
+									mammals, invertebrates, plants, primates, rodents and vertebrates. last updated Dec 2017). <br>
+									Taxa names should be separated by a newline. Genera and species should be separated by a space or an underscore: 
+										<br><!--<input name="inputFile" type="file" id="inputFile" class="form-control hidden" value=""></input>
+											<label for="inputFile" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Choose file
+											</label>-->
+										
+										
+									<!--<input type="file" name="inputFile" id="inputFile" onclick="onChooseFile() "></input>-->
+							
+								</div>
+							</p>
+
+							<p>
+							<div class="row rowOfer divOfer">
+								<div class="col-md-6 col-lg-6 noPadding lineHeightNormal">
+									<input name="inputFile" type="file" id="inputFile" class="form-control hidden" value=""></input>
+											<label for="inputFile" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Choose file
+											</label>
+									<br>
+								<!--textarea id="inputText" name="inputText" rows=6 cols=40 placeholder="Paste your list"></textarea-->
+								<textarea id="inputText" name="inputText" rows=6 style="width:80%;" placeholder="Paste your list">
+Areca catechu
+Areca concinna
+Areca hutchinsoniana
+264298
+Areca macrocalyx
+Areca rheophytica
+Areca triandra
+Areca tunku
+Areca vestiaria
+								</textarea>
+								<input type="button" value="Load example" onclick="loadExample()"></input>
+									<div class="inner"><input type="button" value="Clear" onclick="eraseInputText();"></div>
+
+								</div>
+									<div class="col-md-6 col-lg-6 fontMedium">	
+										<font color="#4f932f"><span class="glyphicon glyphicon glyphicon glyphicon-filter"></span> Filtering options</font><br><label>Include species descendants:</label><a id="popover40" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Define down to which level the analysis will be conducted. Choosing “yes” will retrieve sequences below the species-level (e.g., subspecies)."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+											<select name="SpeciesDescendants" id="SpeciesDescendants" class="myWidth fontMedium">
+											  <option value="Yes">Yes</option>
+											  <option value="No" selected="selected">No</option>
+											</select><br>
+										<!--a href="http://OneTwoTree.tau.ac.il/download/input_examples/example.txt" target="blank"><i>example</i></a   checked="checked"-->
+											  <input type="hidden"   id="Filter_SubSp_hidden" name="Filter_SubSp" value="on"> 
+											  <input type="checkbox" id="Filter_SubSp" name="Filter_SubSp" checked="checked"> Filter intraspecific varieties<a id="popover18" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Exclude intraspecific taxa (varietiesor subspecies) from analysis."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+											  <input type="hidden"   id="Merge_Subsp_hidden" name="Merge_Subsp" value="off">
+											  <input type="checkbox" id="Merge_Subsp" name="Merge_Subsp" > Merge intraspecific varieties<a id="popover19" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Merge data from intraspecific taxa to their progenitor species"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+	
+
+
+											  <br>
+											  <input type="hidden"   id="Filter_Hybrids_hidden" name="Filter_Hybrids" value="on">
+											  <input type="checkbox" id="Filter_Hybrids" name="Filter_Hybrids" checked="checked"> Filter hybrids<a id="popover17" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Exclude species marked as hybrids (e.g. Narcissus x alleniae)."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+											  <br>
+											  <input type="hidden"   id="Filter_Unresolved_hidden" name="Filter_Unresolved" value="on">
+											  <input type="checkbox" id="Filter_Unresolved" name="Filter_Unresolved" checked="checked"> Filter open nomenclature<a id="popover20" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Exclude unresolved names (cf. / sp. / aff. / f.)."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+											  
+									</div>
+								<!--input type="button" name="btnLoadExample" id="btnLoadExample" onclick="javascript:loadExample()" value="Load Example"></input-->
+								<!--<div class="col-md-6 col-lg-6 fontMedium">								
+									<!--a href="http://OneTwoTree.tau.ac.il/download/input_examples/example.txt" target="blank"><i>example</i></a   checked="checked"-->
+									  <!--<input type="hidden"   id="Filter_Hybrids_hidden" name="Filter_Hybrids" value="on">
+									  <input type="checkbox" id="Filter_Hybrids" name="Filter_Hybrids"> Filter intraspecific variants<a id="popover18" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Include or exclude intraspecific taxa such as those marked as variants (var) or subspecies (subsp)"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									  <input type="hidden"   id="Merge_Subsp_hidden" name="Merge_Subsp" value="off">
+									  <input type="checkbox" id="Merge_Subsp" name="Merge_Subsp" > Merge intraspecific variants<a id="popover19" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Merge data from intraspecific taxa to their progenitor species"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									  <br>
+									  <br>
+									  <input type="hidden"   id="Filter_Hybrids_hidden" name="Filter_Hybrids" value="off">
+									  <input type="checkbox" id="Filter_Hybrids" name="Filter_Hybrids" > Filter Hybrids<a id="popover17" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Include or exclude species marked as hybrids (e.g. Narcissus x alleniae)"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									  <br>
+									  <input type="hidden"   id="Filter_Unresolved_hidden" name="Filter_Unresolved" value="off">
+									  <input type="checkbox" id="Filter_Unresolved" name="Filter_Unresolved" > Filter Open nomenclature<a id="popover20" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Include or exclude unresolved names (cf. / sp. / aff. / f.)"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+								</div>-->
+
+								</div>
+								<br>
+								<p><b><font color="#4f932f"><span class="glyphicon glyphicon glyphicon-random"></span>   Name resolution</font><a id="popover41" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Map input names into accepted names of an external database."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></b></p>
+								
+									
+								<div class="col-md-6 col-lg-6 ">Name resolution options:
+									<!-- Insert Name Resolution options: -->
+									<br><input type="radio" name="NameResType" value="None" 	      required  checked="checked"	> <label class="fontMedium"> None<a id="popover42" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Consider input list as is"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></label>
+									<br><input type="radio" name="NameResType" value="SpellingCorrection" required 	> <label class="fontMedium"> Spelling correction<a id="popover43" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Correct for probable misspellings as well as difference in naming conventions in comparison to the selected naming-database"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></label>
+									<br><input type="radio" name="NameResType" value="MatchedNames" required 	> <label class="fontMedium"> Matched names<a id="popover44" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Spelling correction and match synonymous taxa names to their accepted ones. The name resolution option can accept taxa up to family level."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></label>
+								</div>
+								<div id="NameDataBaseDivNCBI">
+									<div class="col-md-6 col-lg-6">Naming-database selection:<a id="popover45" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Choose a reference naming-database"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+										<!-- Insert Name Resolution options: -->
+										<br><input type="radio" name="NR_DB_name" value="NCBI" 	      required  checked="checked"	> <label class="fontMedium"> NCBI</label>
+										
+										<!--<br><input type="radio" name="NR_DB_name" value="COL" required 	> <label class="btn fontMedium">Catalog of life</label>-->
+										<br id="addedLines">
+										<br id="addedLines">
+										<br id="addedLines">
+										<br id="addedLines">
+								</div>		
+								<div id="NameDataBaseDivAll">
+									<div class="col-md-6 col-lg-6">Naming-database selection:<a id="popover46" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Choose a reference naming-database"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+										<!-- Insert Name Resolution options: -->
+										<br><input type="radio" name="NR_DB_name" value="NCBI" 	      required  checked="checked"	> <label class="fontMedium"> NCBI</label>
+										<br><input type="radio" name="NR_DB_name" value="PLT" required 	> <label class="fontMedium"> The plant list</label><a id="popover58" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="The possible ranks to be inputted in these databases are species, genera and families."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br><br><!--<br><input type="radio" name="NR_DB_name" value="COL" required 	> <label class="fontMedium"> Catalogue of life</label><a id="popover59" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="The possible ranks to be inputted in these databases are species, genera and families."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>-->
+								</div>	
+							
+							<!--<div class="col-md-4 col-lg-4 ">
+								  
+								  <input type="hidden"   id="Merge_Subsp_hidden" name="Merge_Subsp" value="off">
+								  <input type="checkbox" id="Merge_Subsp" name="Merge_Subsp" > Merge intraspecific variants<a id="popover19" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Merge data from intraspecific taxa to their progenitor species"><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									
+							
+								</div>-->
+														
+						</div>
+				
+
+                            </p>
+				
+							<p><b><font color="#171A17">OR</font>
+							<div id="divOR"></div></b></p>
+						<!--h2 class="section" id="rerun">rerun</h2-->	
+							<p class="section" id="rerun"><span class="glyphicon glyphicon glyphicon-repeat"></span> Rerun your data:
+								<br>
+								<input type="hidden" id="OriginJobID" name="OriginJobID" value="None">
+								<input type="hidden" id="OriginJobDir" name="OriginJobDir" value="">
+								<!--input type="text" id="editBoxOriginJobID" value="1487493777" placeholder="Enter your results ID"></input-->
+								<input type="text" id="editBoxOriginJobID" placeholder="Enter your results ID"></input>
+								<input type="button" id="LoadRerunData" value="Load re-run data" onclick="getJobData()"></input>
+						
+								<div class="fontMedium" id=divRerun style="display: none;">
+									<div id="divRerunTxt"></div>
+				
+
+										<!--&#8226 <a href="#idUserInputDiv" onclick="moveCursorToInputText()">Edit taxa list</a>	-->
+									    &#8226 <a href="#divParameters"  onclick=$('#parameters').collapse('show');>Adjust running parameters</a>
+									<br>&#8226 <a href="#loadAndSelect"  onclick=$("#divClustersTable").show(); id="loadAndSelect" >Load and select your clusters</a>
+									<!--br><input id="showClusters" type="checkbox"> Load and select your clusters -->
+									
+									<div id="divClustersTable" style="display: none;"></div>
+								</div>
+
+                            </p>
+				
+
+                        <!--</div>-->
+
+
+                     <br>
+					 
+					 <!-- Parameters link and content -->
+						<div id="divParameters" class = "divOfer">
+							<p>
+								<a type="button" value="parameters" data-toggle="collapse" data-target="#parameters" style="cursor: pointer;">
+									<!--<span class="glyphicon glyphicon-plus-sign infoIcon"></span> Advanced Parameters</a>-->
+									<font color="#2a3c75"> <span class="glyphicon glyphicon glyphicon-cog"></span>  Advanced parameters</font></a>
+							</p>
+
+
+
+
+							<div id="parameters" class="collapse">
+								<div class="panel-body">
+								
+								 <div id="divRooted">
+								 <div class="row rowOfer" id="rooted">
+									<div class="col-md-3 col-lg-3">Outgroup selection:<a id="popover37" data-trigger="hover" class="btn btn-default transparentBorder fontSize_23px" rel="popover" data-html="true" data-content="Adding an outgroup allows to root the tree and to determine the directionality of evolution. This is an illustration option allowing the rooting of the phylogeny at the branch leading to the specified outgroup. Users may need to re-root manually."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<br><input type="radio" name="Outgroup_Flag" value="None" required checked="checked"> None<a id="popover5" data-trigger="hover" class="btn btn-default transparentBorder" rel="popover" data-html="true" data-content="Do not add an outgroup. This option will disable the reconstruction of an ultrametric phylogeny."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></input>
+										<br><!--<input type="radio" name="Outgroup_Flag" value="Multiple" required> Multiple-->
+										<!--<br><input type="radio" name="Outgroup_Flag" value="User" required> User defined<a id="popover8" data-trigger="hover" class="btn btn-default transparentBorder fontSize_21px" rel="popover" data-html="true" data-content="Specify an outgroup species."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></input>
+										<input type="text" size="50" id="Outgroup_User" name="Outgroup_User" class="form-control" placeholder="User outgroup species" required></input>-->
+										<input type="radio" name="Outgroup_Flag" value="Single" required> Automatic selection</input><a id="popover55" data-trigger="hover" class="btn btn-default transparentBorder" rel="popover" data-html="true" data-content="Allow OneTwoTree to automatically select a potential outgroup species."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									</div>
+									<!--<div id="divOutgroupUser2" class="col-md-6 col-lg-6" style="display: none;">
+										<br><input type="text" size="50" id="Outgroup_User" name="Outgroup_User" class="form-control" placeholder="Enter your outgroup species"></input>
+									</div>-->
+									</div>
+								 </div>
+
+	
+
+
+ 								 <hr id="hr1">
+
+								<div id="divChooseGenome">
+									<div class="row rowOfer">
+										<div class="col-md-3 col-lg-3">Choose genome:<a id="popover11" data-trigger="hover" class="btn btn-default transparentBorder fontSize_21px" rel="popover" data-html="true" data-content="Include or exclude clusters that were classified to contain accessions from a certain genome type."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+										<div class="col-md-3 col-lg-3 fontMedium">
+  											  <br>
+											  <input type="hidden"   id="include_Nuc_hidden" name="include_Nuc" value="on">
+											  <input type="checkbox" id="include_Nuc" name="include_Nuc" checked="checked"> Nucleus
+											  <br>
+											  <input type="hidden"   id="include_Mt_hidden" name="include_Mt" value="on">
+											  <input type="checkbox" id="include_Mt" name="include_Mt" checked="checked"> Mitochondrial
+											  <br>
+											  <input type="hidden"   id="include_CP_hidden" name="include_CP" value="on">
+											  <input type="checkbox" id="include_CP" name="include_CP" checked="checked"> Chloroplast
+										</div>
+									</div>								  
+ 								 <hr id="hr3">
+								</div>	
+	
+								<div id="divClusteringTools">
+								  <div class="row rowOfer">
+									<div class="col-md-1 col-lg-3">Clustering options:<a id="popover25" data-trigger="hover" class="btn btn-default transparentBorder fontSize_21px" rel="popover" data-html="true" data-content="Modify the clustering process parameters. This is used to control the partition of the retrieved sequence data into orthology groups."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+
+
+									<div class="col-md-3 col-lg-3"></div>
+
+									<div class="col-md-3 col-lg-3"></div>
+
+									<div class="col-md-3 col-lg-3"></div>
+								  </div>
+
+								  <div class="row rowOfer">
+										<div class="col-md-1 col-lg-1"></div>
+										<div class="col-md-2 col-lg-2 fontMedium">Clustering software:</div>
+										<div class="col-md-3 col-lg-3 fontMedium">
+											<select name="ClusteringMethod" id="ClusteringMethod" class="myWidth">
+											  <option value="Ortho">OrthoMcl</option>
+											  <option value="BlastClust">BLASTCLUST</option>
+
+											</select>
+
+
+										</div>								
+
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divOrthoOM1">OrthoMCL pairwise similarity cutoff:
+										<br>OrthoMCL inflation parameter:
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divOrthoOM2">
+										<input type="number" class="lineHeightNormal myWidth" name="orthoSeq_Ratio" id="orthoSeq_Ratio" value="0.5" min="0" max="1" step="0.05"> <a id="popover1" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="The minimal aligned region between pairs of sequences to be included in the same orthology group (i.e., sequence cluster). Values represent the ratio between the length of the aligned region and the length of the longer sequence and should be in the range of 0-1."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+
+										<br>
+
+
+
+										<input type="number" class="lineHeightNormal myWidth" name="Ortho_Inflation" id="Ortho_Inflation" value="1.5" min="1" max="4" step="0.1"> <a id="popover2" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Cluster tightness; Higher index will result in partitioning less sequence data to a larger number of clusters. Values should be in the range of 1-4."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+
+
+									</div>
+
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divOrthoBC1">BLASTCLUST percent identity:
+										<br>BLASTCLUST coverage length:
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divOrthoBC2">
+										<input type="number" class="lineHeightNormal myWidth" name="BC_percentIdentity" id="BC_percentIdentity" value="1.7" min="0" max="100" step="0.1"> <a id="popover33" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Similarity threshold. If value is <3 the threshold is set as a blast score density (0-3; default = 1.75). If >=3 the threshold is set as a percent of identical residues (3-100)."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+
+										<br>
+
+
+
+										<input type="number" class="lineHeightNormal myWidth" name="BC_CoverageLength" id="BC_CoverageLength" value="0.9" min="0.1" max="1" step="0.01"> <a id="popover36" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Percent of coverage of the length of the sequences that needs to be similar to be included in the cluster."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+
+
+									</div>
+
+								
+										
+
+
+	
+										
+									</div>	
+							
+								
+								
+								
+								</div>									
+ 								 
+
+								 <hr id="hr3">
+								
+
+								<div  id="divAlignmentOptions">
+								  <div class="row rowOfer">
+									<div class="col-md-3 col-lg-3">Alignment options:</div>
+									<div class="col-md-3 col-lg-3"></div>
+									<div class="col-md-3 col-lg-3"></div>
+									<div class="col-md-3 col-lg-3"></div>
+								  </div>
+								  
+								  <div class="row rowOfer">
+  									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">MSA software:</div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<select name="MSA_Software" id="MSA_Software" class="myWidth">
+										  <option value="MAFFT">MAFFT</option>
+										  <option value="ClustalOmega">Clustal Omega</option>
+										</select>
+
+									</div>
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divMAFFT1">Max iterations:
+										<br>Pairwise alignment method:
+									</div>
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divMAFFT2"">
+										<select name="MAFFT_maxiterate" id="MAFFT_maxiterate" class="myWidth">
+											<option value="0">0</option>
+											<option value="2">2</option>
+											<option value="5">5</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="50">50</option>
+											<option value="80">80</option>
+											<option value="100">100</option>
+											<option value="1000">1000</option>
+										</select><a id="popover9" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Maximum number of iterations in the iterative refinement method."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										<select name="PairwiseAlignmentMethod" id="PairwiseAlignmentMethod" class="myWidth">
+											<option value="MAFFT_6mer">6mer</option>
+											<option value="MAFFT_localpair">localpair</option>
+											<option value="MAFFT_genafpair">genafpair</option>
+											<option value="MAFFT_globalpair">globalpair</option>
+										</select><a id="popover29" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="The number of k-mers shared by a pair of sequences that is used to generate the distance matrix. Increase this value for highly similar sequences."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+
+									</div>
+									
+
+									<div class="col-md-6 col-lg-6 fontMedium" id="divClustalOmega" 	style="display: none;">
+										<br>
+									</div>
+								
+								</div>
+
+   								  <div class="row rowOfer">
+									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-11 col-lg-11"></div>
+								  </div>
+
+								  
+ 								  <div class="row rowOfer">
+									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">MSA filter:<a id="popover26" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Assign confidence scores to positions and sequences of the MSA and remove poorly aligned ones."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<select name="FilterMSA_Method" id="FilterMSA_Method" class="myWidth">
+											<option value="None">None</option>
+											<option value="GUIDANCE"><font color=red>GUIDANCE</font></option>
+											<option value="Trimal">trimAl</option>
+											<option value="gBlocks">gBlocks</option>
+										</select>
+									</div>
+									<div class="col-md-6 col-lg-6" id="divNone">
+										<br>
+									</div>
+									<div class="col-md-6 col-lg-6" id="divGUIDANCE" 	style="display: none;">
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divGuidance1" 	style="display: none;">
+										<div class="row rowOfer">
+											 <input type="radio" name="Guidance_RowCol" value="Both" required checked="checked" > Rows & Columns (default) <a id="popover50" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="If selected GUIDANCE will remove sequences with <0.6 reliability score and positions with <0.93 reliability score."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a></input> <br>
+											 <input type="radio" name="Guidance_RowCol" value="RowsOnly" required> Rows only</input><br>
+											 <input type="radio" name="Guidance_RowCol" value="ColOnly" required> Columns only</input>
+										</div>
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divTrimal1" 	style="display: none;">
+										<div class="row rowOfer">
+										Fraction of seqs with a gap allowed:
+										</div>
+									</div>
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divTrimal2" 	style="display: none;">
+										<div class="row rowOfer">
+											<input type="number" class="lineHeightNormal myWidth" name="Trimal_CutOff" value="0.01" step="0.01" min="0" max="1" style="padding-left:0">
+										    <a id="popover27" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Positions with a gap score smaller than the defined threshold will be removed from the alignment. Values should be in the range 0-1."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										</div>
+									</div>
+									
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="div_gBlocks1" 	style="display: none;">
+										<div class="row rowOfer">
+										Options for a less stringent selection:
+										</div>
+									</div>
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="div_gBlocks2" 	style="display: none;">
+										<div class="row rowOfer">
+										<input type="hidden"   id="gb_SmallerBlocks_hidden" 		name="gb_SmallerBlocks" 	value='true'>
+										<input type="checkbox" id="gb_SmallerBlocks" 				name="gb_SmallerBlocks" 	value='true' checked="checked"> Allow smaller final blocks
+										<br>
+										<input type="hidden"   id="gb_AllowGaps_hidden" 			name="gb_AllowGaps" 		value='true'>
+										<input type="checkbox" id="gb_AllowGaps" 					name="gb_AllowGaps" 		value='true' checked="checked"> Allow gap positions in final blocks
+										<br>
+										<input type="hidden"   id="gb_LessStrictFlanking_hidden" 	name="gb_LessStrictFlanking" value='true'>
+										<input type="checkbox" id="gb_LessStrictFlanking" 			name="gb_LessStrictFlanking" value='true' checked="checked"> Allow less strict flanking positions
+										
+										</div>
+									</div>
+									
+									
+								  </div>								  
+ 								 <hr id="hr2">							
+								  </div>								  
+
+							
+									
+									<div class="row rowOfer" id="divTreeMethod">
+									  <div class="row rowOfer">
+										<div class="col-md-3 col-lg-3">Phylogeny inference:</div>
+										<div class="col-md-3 col-lg-3"></div>
+										<div class="col-md-3 col-lg-3"></div>
+										<div class="col-md-3 col-lg-3"></div>
+									  </div>
+								  
+
+
+<!--									<div class="col-md-1 col-lg-1"></div>
+<!--									<div class="col-md-2 col-lg-2 fontMedium">Tree Type:</div>
+<!--									<div class="col-md-3 col-lg-3 fontMedium">
+<!--										<select name="Tree_Type" id="Tree_Type" class="myWidth">
+<!--										  <option value="ConcatTree" selected="selected">ConcatTree</option>
+<!--										  <option value="PerLocusTree">PerLocusTree</option>
+<!--										</select>
+<!--									</div>
+<!--									<br>-->
+
+									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">Tool:</div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<select name="Tree_Method" id="Tree_Method" class="myWidth">
+										  <option value="RAxML" selected="selected">RAxML</option>
+										  <option value="ExaML">ExaML</option>
+										  <option value="MrBayes">MrBayes</option>
+
+										</select>
+									</div>
+
+
+							
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divMrBayesModelChoice" style="display: none;"> 
+										Nucleotide model:<a id="popover47" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Choose “auto” to allow automatic model selection using JmodelTest."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Clock model:<a id="popover48" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Choose a non-unconstrained clock to obtain an ultrametric tree."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a> 
+										<br><br>
+										Number of generations:<a id="popover7" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Number of Markov chain Monte Carlo iterations to perform."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Sample frequency:<a id="popover13" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="How often the Markov chain should be sampled and stored for computing the posterior distribution. Decrease this number for analyses with smaller number of generations."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Number of chains:<a id="popover14" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Number of parallel Markov chains to execute."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Burnin fraction:<a id="popover15" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Fraction of initial iterations to be discarded."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Check freq:<a id="popover16" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Prints all parameter values of all chains to a file every Checkfreq generations."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+									</div>
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divRaxmlModelChoice"> 
+										Nucleotide model:
+										<br>
+										Enable bootstrap:
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divExamlModelChoice"> 
+										Nucleotide model:<a id="popover49" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="PSR model in ExaML is identical to the CAT model in RAxML."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										<br>
+										Enable bootstrap:
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divSelectMrBayes" style="display: none;"> 
+										<select name="User_MrBayes_Model" id="User_MrBayes_Model" class="myWidth">
+										  <option value="None">Auto</option>
+										  <option value="JC">JC</option>
+										  <option value="JC+I">JC+I</option>
+										  <option value="JC+G">JC+G</option>
+										  <option value="JC+I+G">JC+I+G</option>
+										  <option value="F81">F81</option>
+										  <option value="F81+I">F81+I</option>
+										  <option value="F81+G">F81+G</option>
+										  <option value="F81+I+G">F81+I+G</option>
+										  <option value="K80">K80</option>
+										  <option value="K80+I">K80+I</option>
+										  <option value="K80+G">K80+G</option>
+										  <option value="K80+I+G">K80+I+G</option>
+										  <option value="HKY">HKY</option>
+										  <option value="HKY+I">HKY+I</option>
+										  <option value="HKY+G">HKY+G</option>
+										  <option value="HKY+I+G">HKY+I+G</option>
+										  <option value="SYM">SYM</option>
+										  <option value="SYM+I">SYM+I</option>
+										  <option value="SYM+G">SYM+G</option>
+										  <option value="SYM+I+G">SYM+I+G</option>
+										  <option value="GTR">GTR</option>
+										  <option value="GTR+I">GTR+I</option>
+										  <option value="GTR+G">GTR+G</option>
+										  <option value="GTR+I+G">GTR+I+G</option>
+										</select>
+										<br>
+
+									
+										<div class="floating-box" id='clk_mod_mb'>
+										<select name="clock_model" id="clock_model">
+											<optgroup label="Unconstrained">
+												<option value="Unconstrained">Unconstrained</option>
+											</optgroup>
+											<optgroup label="Strict">
+												<option value="uniform">Uniform</option>
+												<option value="birthdeath">Birthdeath</option>
+												<option value="coalescence">Coalescence</option>
+											</optgroup>
+											<optgroup label="Relaxed">
+												<option value="cpp">CPP</option>
+												<option value="tk02">TK02</option>
+												<option value="igr">IGR</option>
+											</optgroup>
+										</select>
+										</div>
+										<div class="floating-box" id='clk_mod_rlx'>
+										<select name="relaxed_branch_option" id="relaxed_branch_option" style="display: none;">
+											<optgroup label="Branch_Length">
+												<option value="uniform">Uniform</option>
+												<option value="birthdeath">Birthdeath</option>
+												<option value="coalescence">Coalescence</option>
+											</optgroup>
+										</select>
+										</div>
+										
+										<div class="floating-box" id='clk_mod_mb_uni'>
+										<select name="clock_model" id="clock_model">
+											<optgroup label="Strict">
+												<option value="uniform">Uniform</option>
+											</optgroup>
+											<optgroup label="Relaxed">
+												<option value="cpp">CPP</option>
+												<option value="tk02">TK02</option>
+												<option value="igr">IGR</option>
+											</optgroup>
+										</select>
+										</div>
+										<div class="floating-box" id='clk_mod_rlx_uni'>
+										<select name="relaxed_branch_option" id="relaxed_branch_option" style="display: none;">
+											<optgroup label="Branch_Length">
+												<option value="uniform">Uniform</option>
+												<option value="uniform">Uniform</option>
+											</optgroup>
+										</select>
+										</div>
+										
+										
+										
+										<br><br>
+										<input type="number" class="lineHeightNormal myWidth" name="ngen" id="ngen" value="100000" step="1" min="10000" max="1000000"> 
+										<br>
+										<input type="number" class="lineHeightNormal myWidth" name="samplefreq" id="samplefreq" value="500" min="1" step="1"> 
+										<br>
+										<input type="number" class="lineHeightNormal myWidth" name="nchains" id="nchains" value="4" min="1" step="1"> 
+										<br>
+										<input type="number" class="lineHeightNormal myWidth" name="burninFrac" id="burninFrac" value="0.25" step="0.0001" min="0" max="1"> 
+										<br>
+										<input type="number" class="lineHeightNormal myWidth" name="checkFreq" id="checkFreq" value="100000" min="10000" step="1"> 
+									</div>
+
+									<div class="col-md-3 col-lg-3 fontMedium" id="divSelectRAxML">
+										<select name="User_RAxML_Model" id="User_RAxML_Model" class="myWidth">
+										  <option value="GTRCAT">GTRCAT</option>
+										  <option value="GTRGAMMA">GTRGAMMA</option>
+										  <option value="GTRCATI">GTRCATI</option>
+										  <option value="GTRGAMMAI">GTRGAMMAI</option>
+										</select>
+										<br>
+										 <input type="radio" name="Use_BootS_RxOn" value="On" required> On</input>
+										 <input type="radio" name="Use_BootS_RxOn" value="Off" checked="checked" required> Off</input>
+										  <br>
+										  <label id="Raxml_BootsNum_name" style="display: none">Bootstrap iteration number:</label><input type="number" class="lineHeightNormal myWidth" name="Raxml_BootS_vals" id="Raxml_BootS_vals" value="100" step="1" min="0" max="1000" style="display: none"></input>
+										 
+									</div>
+									
+									
+									<div class="col-md-3 col-lg-3 fontMedium" id="divSelectExaML" style="display: none;"> 
+										<select name="User_ExaML_Model" id="User_ExaML_Model" class="myWidth">
+										  <option value="GAMMA">GAMMA</option>
+										  <option value="PSR">PSR</option>
+
+										</select>
+
+										 <br>
+
+										 <input type="radio" name="Use_BootS_ExOn" value="On" required> On</input>
+										 <input type="radio" name="Use_BootS_ExOn" value="Off" checked="checked" required> Off</input>
+										  <br>
+										  <label id="Examl_BootsNum_name" style="display: none">Bootstrap iteration number:</label><input type="number" class="lineHeightNormal myWidth" name="Examl_BootS_vals" id="Examl_BootS_vals" value="100" step="1" min="0" max="1000" style="display: none"></input>
+										<br>
+										<!--br>
+										<input type="number" class="lineHeightNormal" name="ngen" id="ngen" value="2000000" step="1" min="0" max="2000000" style="padding-left:0">
+										<a id="popover7" data-trigger="hover" class="btn btn-default transparentBorder" rel="popover" data-html="true" data-content="Sets the number of cycles for the MCMC algorithm"><span class="glyphicon glyphicon-info-sign"></span></a-->
+									</div>
+									
+
+
+								  <div class="row rowOfer">
+  									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">Tree type:<a id="popover31" data-trigger="hover" class="btn btn-default transparentBorder noPadding" rel="popover" data-html="true" data-content="Supermatrix tree will infer a tree based on the supermatrix. Tree per cluster will infer multiple trees, each based on a single cluster included in the supermatrix."> <span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<select name="Tree_Type" id="Tree_Type" class="myWidth">
+										  <option value="ConcatTree" selected="selected">Supermatrix tree</option>
+										  <option value="PerLocusTree">Tree per cluster</option>
+										</select>
+									</div>
+									</div>
+
+
+								  <br>
+								  <div class="row rowOfer">
+									<div class="col-md-1 col-lg-1 fontMedium"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">Constraint tree:</div>
+									<div class="col-md-2 col-lg-2 fontMedium" id="outer">
+										  <textarea id="ConstraintNewick" name="ConstraintNewick" rows=2 style="width:80%;" ></textarea>	<!--placeholder="Enter your constraint tree(newick format)-->								  
+											  <div class="inner"><input type="button" value="Load example" onclick="loadNewickExample()"></input></div>								  
+											  <div class="inner"><input type="button" value="Clear" onclick="eraseText();"> </div>
+											<br>
+											<input name="fileCT" type="file" id="filesCT" class="form-control hidden" value=""></input>
+											<label for="filesCT" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Load your tree
+											</label>
+									</div>
+								</div>
+	
+								  <br>
+								  
+								
+								  <div class="row rowOfer" id ="UltraMetricSection">
+  									<div class="col-md-1 col-lg-1"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">Divergence time estimation:<a id="popover56" data-trigger="hover" class="btn btn-default transparentBorder" rel="popover" data-html="true" data-content="Divergence Time Estimation is only enabled when choosing to root the tree (either by providing an outgroup or selecting automatically)."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a></div>
+									<div class="col-md-3 col-lg-3 fontMedium">
+										<select name="UltraMetricFlag" id="UltraMetricFlag" class="myWidth">
+										  <option value="No" selected="selected">No</option>
+										  <option value="Yes">Yes</option>
+										</select>
+									</div>
+									</div>
+
+
+								  <div class="row rowOfer" id="ML_TimeDateMethod"> <!-- dpll or dpp-->
+									<br>
+									<div class="col-md-1 col-lg-1 fontMedium"></div>
+									<div class="col-md-2 col-lg-2 fontMedium" id="NodeDateMethodH" >Tool:<a id="popover57" data-trigger="hover" class="btn btn-default transparentBorder" rel="popover" data-html="true" data-content="Choosing a calibration tool is only available for ML reconstruction methods. For Bayesian framework set the Divergence Time Estimation to Yes and choose a constrained clock model."><span class="glyphicon glyphicon-info-sign infoIcon"></span></a>
+										  <!--<label class="col-md-3 col-lg-3 btn fontMedium">Method: </label><br>-->
+										  <select disabled name="NodeDateMethod" id="NodeDateMethod" class="form-control">
+										    <option value="treepl" selected="selected">treePL</option>
+										    <option value="dpp">PLL-DPPDiv</option>
+										  </select>
+									</div>
+									<br><br>
+								</div>
+
+
+								<div class="row rowOfer" id="NodeDateSection">
+									<div class="col-md-1 col-lg-1 fontMedium"></div>
+									<div class="col-md-2 col-lg-2 fontMedium">Node dating:</div>
+									<div class="col-md-2 col-lg-2 fontMedium" id="outer">
+										  <textarea id="NodeDateInputFile" name="NodeDateInputFile" rows=2 style="width:80%;" ></textarea>	
+										  <div class="inner"><input type="button" value="Load example" onclick="loadNoadDateExample()"></input></div>								  
+											<div class="inner"><input type="button" value="Clear" onclick="eraseNodeDateText();"></div>
+											<br>
+											<input name="file" type="file" id="files" class="form-control hidden" value=""></input>
+											<label for="files" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Load your splits
+											</label>
+									</div>
+								</div>
+
+								<br><br>
+
+							</div>
+				  
+						</div>
+					</div>
+					</div>
+                <!-- parameters link and content -->
+					 
+				<br>
+					 
+				 
+				 
+
+				<div class = "divOfer">
+					<div class="form-group">
+						<label for="inputEmail">Email address</label>
+						<input type="email" class="form-control" name="inputEmail" placeholder="Enter email" required>
+					</div>
+
+					<div class="form-group">
+						<label for="jobTitle">Job title (optional)</label>
+						<input type="text" class="form-control" name="jobTitle" placeholder="Add a descriptive job title to your query">
+					</div>
+				</div>
+
+				<br>
+				
+				<div style="text-align:center">  
+					<p><input type="submit" name="Submit" value="   Submit   " id="submitFormBtn"></p>
+				</div>  
+				<br><br><br><br>
+				
+				<input type="hidden" id="date" name="date"/>
+				
+			</form>
+
+
+
+		<!--<p align="center"><font size=35 color="#3C7A61"><b>OneTwoTree</b></font></p>-->
+       
+
+
+
+
+		</div> <!-- jumbotron -->
+    </div> <!-- /container -->
+
+	<br><br><br><br>
+
+	
+
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<!---script src="https://code.jquery.com/jquery-10.2.min.js"></script-->
+	<!--script src="bootstrap-3.0.3/dist/js/bootstrap.min.js"></script-->
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.0.3/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet">
+
+	<!-- dataTables is for a sortable table-->
+
+	
+	<link rel="stylesheet" type="text/css" media="screen and (min-aspect-ratio: 1/1)" href="http://OneTwoTree.tau.ac.il/css/onetwotree_web.css">
+	<link rel="stylesheet" type="text/css" media="screen and (max-aspect-ratio: 1/1)" href="http://OneTwoTree.tau.ac.il/css/onetwotree_mobile.css">
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
+
+
+
+
+
+
+
+	
+	<script src="/js/googleAnalytics.js"></script>	
+	
+	<script type="text/javascript">
+		$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
+	</script>
+	
+</body>
+</html>

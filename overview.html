@@ -1,0 +1,984 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style>
+
+.tab { margin-left: 40px; }
+
+pInd {
+    text-indent: 50px;
+}
+
+IMG.displayed {
+    display: block;
+	max-width: 100%;
+    margin-left: auto;
+    margin-right: auto 
+	}
+
+.over_head {
+	font-family: "Georgia", Times, serif, bold;
+	font-size: 30px;
+	font-color: #41a6c1
+	text-align: center;
+	text-shadow: 0 0 3px white;
+	#background-color: #41a6c1;
+}
+
+.over_data {
+	font-family: "Georgia", Times, serif, bold;
+	font-size: 20px;
+	font-color: black
+	text-align: center;
+	#background-color: #41a6c1;
+}
+	
+ul.header {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li.header {
+    float: left;
+}
+
+li.header a, .dropbtn {
+    display: inline-block;
+	font-family: "Georgia", Times, serif;
+	font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.header a:hover, .dropdown:hover .dropbtn {
+    background-color: #88c187;
+}
+
+ .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+<!--	p.dobline {
+<!--		border-style: double;
+<!--		border-width: thick;
+<!--	}
+<!--	p.dot {
+<!--	    border-style: dotted;
+<!--		border-width: 2px;
+<!--	}-->
+ 
+
+</style>
+
+<!-- Check multi Dropdown -->
+
+
+ 	<script type="text/javascript">
+        function insert(){
+            var src = document.getElementById("gamediv");
+            var img = document.createElement("img");
+            img.src = "images/OTT_Head3.jpg";
+            src.appendChild(img);
+        }
+	</script>
+	
+	
+
+	<!--script src="jquery.js"></script-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="shortcut icon" href="images/tree_1.jpg"/>
+
+
+    <title>OneTwoTree server</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.0.3/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet">
+
+	<!-- dataTables is for a sortable table-->
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">	
+
+    <link rel="stylesheet" type="text/css" href="http://onetwotree.tau.ac.il/css/onetwotree.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
+	<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+	<script src="/jquery-csv-master/src/jquery.csv.js"></script>
+    <script src='js/purl.js'></script>
+	<!--script src="/js/oneTwoTree.js"></script-->
+	
+	<!-- dataTables is for a sortable table-->
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+	$(document).ready(function(){
+	
+	document.getElementById("JobToLoadID")
+		.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode == 13) {
+			document.getElementById("LoadJob_button").click();
+		}
+	});	
+
+	
+	$('ul.pagination li a').on('click', function(e) {
+		e.preventDefault();
+		var tag = $(this);
+		//alert(" click on " + tag.text());
+		document.getElementById('rerunOptions').value = tag.text();
+		if (tag.text() == 'Phylogeny'){
+			$("#divClustersTable").show();
+		}
+		else{
+			$("#divClustersTable").hide();
+		}
+	});
+
+	
+	if ($.url().param('jobId')){
+		document.getElementById('editBoxOriginJobID').value = $.url().param('jobId');
+		getJobData();
+		window.location = '#rerun';
+	}
+		
+
+    $('input[type=radio][name=rerunOptions]').change(function() {
+   
+		if (this.value == 'EditTaxa') 
+		{ 
+			$("#divClustersTable").hide();
+			$("#rooted").show();
+			$("#hr1").show();
+			$("#divAlignmentOptions").show();
+			$("#hr2").show();			
+			$("#divChooseGenome").show();
+			$("#hr3").show();
+			$("#divTreeMethod").show();
+		}
+		
+		if (this.value == 'Clustering') 
+		{ 
+			$("#divClustersTable").hide();
+			$("#rooted").hide();
+			$("#hr1").hide();			
+			$("#divAlignmentOptions").hide();
+			$("#hr2").hide();			
+			$("#divChooseGenome").show();
+			$("#hr3").show();			
+			$("#divTreeMethod").show();
+		}
+
+		if (this.value == 'Alignment') 
+		{
+			$("#divClustersTable").hide();
+			$("#rooted").hide();
+			$("#hr1").hide();			
+			$("#divAlignmentOptions").show();
+			$("#hr2").hide();			
+			$("#divChooseGenome").hide();
+			$("#hr3").hide();						
+			$("#divTreeMethod").hide();			
+		}
+		
+        if (this.value == 'Phylogeny') 
+		{
+			$("#divClustersTable").show();
+			$("#rooted").hide();
+			$("#hr1").hide();						
+			$("#divAlignmentOptions").hide();
+			$("#hr2").hide();									
+			$("#divChooseGenome").hide();
+			$("#hr3").hide();									
+			$("#divTreeMethod").show();
+        }
+		
+		
+	});
+
+		
+			$('#FilterMSA_Method').on('change', function() {
+			  if ( this.value == 'None')
+			  {
+				$("#divNone").show();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'GUIDANCE')
+			  {
+				
+   		        $('#myModal').find('.modal-header').html('<font color=red><b>GUIDANCE may slow OneTwoTree down<b><br></font>');
+				$('#myModal').find('.modal-body').html('<p>Running GUIDANCE may slow OneTwoTree down,<br>especially in case of large sets of sequences.<br>(Our default run does not include Guidance)</p>');
+				$("#myModal").modal();
+
+				//$('#FilterMSA_Method').confirmation();
+				$("#divNone").hide();
+				$("#divGUIDANCE").show();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'Trimal')
+			  {
+				$("#divNone").hide();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").show();
+				$("#divTrimal2").show();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'gBlocks')
+			  {
+				$("#divNone").hide();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").show();
+				$("#div_gBlocks2").show();
+			  }
+
+			  });
+			
+			$('#MSA_Software').on('change', function() {
+			  if ( this.value == 'MAFFT')
+			  {
+				$("#divMAFFT1").show();
+				$("#divMAFFT2").show();
+				$("#divPRANK").hide();
+				$("#divClustalOmega").hide();
+			  }
+			  
+			  if ( this.value == 'PRANK')
+			  {
+				$("#divMAFFT1").hide();
+				$("#divMAFFT2").hide();
+				$("#divPRANK").show();
+				$("#divClustalOmega").hide();
+			  }
+			  
+			  if ( this.value == 'ClustalOmega')
+			  {
+				$("#divMAFFT1").hide();
+				$("#divMAFFT2").hide();
+				$("#divPRANK").hide();
+				$("#divClustalOmega").show();
+			  }
+			  
+			});
+						
+			$('#Tree_Method').on('change', function() {
+			  if ( this.value == 'MrBayes')
+			  {
+				$("#divModelChoiceAndNgen").show();
+				$("#divModelChoice").hide();
+				$("#divSelectMrBayes").show();				
+				$("#divSelectRAxML").hide();
+				$("#divSelectExaML").hide();
+			  }
+			  
+			  if ( this.value == 'RAxML')
+			  {
+				$("#divModelChoiceAndNgen").hide();
+				$("#divModelChoice").show();
+				$("#divSelectMrBayes").hide();				
+				$("#divSelectRAxML").show();
+				$("#divSelectExaML").hide();
+			  }
+			  
+			  if ( this.value == 'ExaML')
+			  {
+				$("#divModelChoiceAndNgen").hide();
+				$("#divModelChoice").show();
+				$("#divSelectMrBayes").hide();				
+				$("#divSelectRAxML").hide();
+				$("#divSelectExaML").show();
+			  }
+			  
+			});
+			
+			
+		$('#example').DataTable();
+		$('#myDataTable').DataTable();
+		
+		if ($('#myDataTable').height){console.log("myDataTable exists");}
+		else{console.log("myDataTable not exists");}
+		/*
+		$('#myDataTable').DataTable( {
+			paging:		false, 
+			info:		false,
+			searching:	false,
+
+			//add these config to remove empty header
+			"bJQueryUI":true,
+			"sDom": 'lfrtip',
+			"order": []
+			
+		} );*/
+		
+		
+		
+    $('#inputText').keyup(function(){
+		//document.getElementById('divClustersTable').empty();
+		$("#inputFile").val("");
+		//$("#editBoxOriginJobID").val("");
+	});
+
+		
+			
+});	// document ready end
+		
+        $(function () {
+            $("#popover1").popover();
+            $("#popover2").popover();
+            $("#popover3").popover();
+            $("#popover4").popover();
+            $("#popover5").popover();
+            $("#popover6").popover();
+            $("#popover7").popover();
+            $("#popover8").popover();
+            $("#popover9").popover();
+            $("#popover10").popover();
+            $("#popover11").popover();
+            $("#popover12").popover();
+
+        });
+
+        function myOnLoad(){
+        }
+		
+		
+		var amountScrolled = 300;
+		$(window).scroll(function() {
+		if ( $(window).scrollTop() > amountScrolled ) {
+			$('a.back-to-top').fadeIn('slow');
+		} else {
+			$('a.back-to-top').fadeOut('slow');
+		}
+	    });	
+			
+		
+		function validateForm(){	
+			// verify there is input
+			var file				= document.forms["myForm"]["inputFile"].value;
+			var txt					= document.forms["myForm"]["inputText"].value;
+			var clustersSelected	= $('#divClustersTable input:checked').length;
+		
+			if ( (file == "") && (txt == "") && (clustersSelected == 0) ) 
+			{
+   		        $('#myModal').find('.modal-header').html('<b>No input entered<b><br>');
+				$('#myModal').find('.modal-body').html('<p>Please,<br>select your FASTA file,<br>or type your list of taxa,<br>or select at least one cluster to re-run.</p>');
+				$("#myModal").modal();
+				return false;
+			}
+
+			// form has input. Do a trick to add unchecked checkboxes values to params.txt
+			if(document.getElementById("trustInserions").checked) {
+			    document.getElementById('trustInserions_hidden').disabled = true;
+			}
+
+			if(document.getElementById("include_Nuc").checked) {
+			    document.getElementById('include_Nuc_hidden').disabled = true;
+			}
+			
+			/*
+			if(document.getElementById("concatAll_Nuc").checked) {
+			    document.getElementById('concatAll_Nuc_hidden').disabled = true;
+			}
+			*/
+			
+			if(document.getElementById("include_Mt").checked) {
+			    document.getElementById('include_Mt_hidden').disabled = true;
+			}
+			
+			/*
+			if(document.getElementById("concatAll_Mt").checked) {
+			    document.getElementById('concatAll_Mt_hidden').disabled = true;
+			}
+			*/
+			
+			if(document.getElementById("include_CP").checked) {
+			    document.getElementById('include_CP_hidden').disabled = true;
+			}
+
+			/*
+			if(document.getElementById("concatAll_CP").checked) {
+			    document.getElementById('concatAll_CP_hidden').disabled = true;
+			}
+			*/
+			
+			// gblocks related
+			if(document.getElementById("gb_SmallerBlocks").checked) {
+			    document.getElementById('gb_SmallerBlocks_hidden').disabled = true;
+				document.getElementById("gb_SmallerBlocks").value = 'true';
+			}
+
+			if(document.getElementById("gb_AllowGaps").checked) {
+			    document.getElementById('gb_AllowGaps_hidden').disabled = true;
+				document.getElementById("gb_AllowGaps").value = 'true';				
+			}
+
+			if(document.getElementById("gb_LessStrictFlanking").checked) {
+			    document.getElementById('gb_LessStrictFlanking_hidden').disabled = true;
+				document.getElementById("gb_LessStrictFlanking").value = 'true';				
+			}
+			
+			if (document.getElementById('OriginJobID').value == "None"){
+				document.getElementById('OriginJobDir').value = "";
+			}
+			else{
+				document.getElementById('OriginJobDir').value = "/bioseq/data/results/oneTwoTree/" + document.getElementById('OriginJobID').value;			
+			}
+								
+			document.getElementById("date").value = new Date().toLocaleString();
+
+		}
+
+
+		
+		/*
+		// json - works ok:
+		var fnameJson = "http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/clusters.json";
+		console.log(fnameJson);
+		
+		var data = $.csv.toObjects(fnameJson);
+		console.log(data);
+		*/
+		
+		/*$.getJSON(fnameJson, function(json) {
+			console.log(json); // this will show the info it in firebug console
+		});*/
+	
+		
+		
+		
+
+// this func is called when user presses the re-run btn
+function getJobData(){
+	// init: clear div, get job num, clear choose file and load example
+	document.getElementById('divClustersTable').empty();
+	var userJobId = document.getElementById('editBoxOriginJobID').value;
+	$("#inputFile").val("");
+	$("#inputText").val("");
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/All_Clusters_data.txt",
+		onSuccess:function(response){
+			console.log("getJobData onSuccess");
+			document.getElementById('OriginJobID').value = userJobId;
+			$("#divRerun").show();
+			$("#divRerunTxt").html("Re-run options for job " + userJobId + ":");
+			$("#divUplaodFile").hide();
+			$("#divOR").hide();
+			
+			// get csv data as objects
+			var data = $.csv.toObjects(response);
+			//console.log(data);
+			
+			// construct table
+			var html = '<div class="fontMedium">Check the clusters to re-run:</div>';
+			html += '<table id="myDataTable" name="myDataTable" class="table table-hover table-responsive table-bordered table-sm rerunTable">';
+			html += '<thead><tr><th><input type="checkbox" id="idSelectAll" onclick="onSelectAll()"> Cluster</th><th>Description</th><th>Type</th><th>Length</th><th>Num of species</th><th>Included</th></tr></thead>';
+			html += '<tbody>';
+			
+			for(var i in data){				
+				// skip non data rows - see in console
+				if (data[i].ClusterID === undefined){ continue; }
+
+				html += '<tr>';
+				html += '<td><input type="checkbox" name="cluster_' + data[i].ClusterID +'"> ' + data[i].ClusterID + '</td>';
+				html += '<td>' + data[i].Desc + '</td>';					
+				html += '<td>' + data[i].Type + '</td>';					
+				html += '<td>' + data[i].length + '</td>';					
+				html += '<td>' + data[i].SpeciesCnt + '</td>';					
+				//html += '<td>' + data[i].SpeciesIds + '</td>';
+				html += '<td>' + data[i].IncludedInConcat + '</td>';					
+				html += '<tr>';
+			}
+			
+			// close table tags
+			html += '</tbody>';
+			html += '</table>';
+			$('#divClustersTable').html(html);
+			
+			getRerunTaxaList();
+		},
+
+		onFailure:function(response){
+			console.log("getJobData onError");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+			$("#divUplaodFile").show();
+			$("#divOR").show();
+
+		}
+	}).send(); //Don't forget to send our request!
+	
+}
+
+
+// this func is called when user presses the re-run btn
+function getRerunTaxaList(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/userInput.txt",
+		onSuccess:function(response){
+			console.log("getRerunTaxaList onSuccess");
+			$("#inputText").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("getRerunTaxaList onFailure");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, taxa list for result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+		}
+	}).send(); //Don't forget to send our request!
+	
+}
+
+	
+	function onChooseFile(){
+		document.getElementById('divClustersTable').empty();
+		document.getElementById('OriginJobID').value = "None";
+		$("#editBoxOriginJobID").val("");
+		$("#inputText").val("");
+		$("#divRerun").hide();
+	}
+	
+	function onSelectAll() {
+		// get state - checked or not?
+		var state = document.getElementById("idSelectAll").checked;
+		// set all checkboxes in div to state
+		$("#divClustersTable :checkbox").prop('checked', state);
+	}
+
+    </script>
+
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="http://bootstrap-confirmation.js.org/assets/js/docs.min.js"></script>
+  
+</head>
+
+<body onload="javascript:myOnLoad()">
+	
+	<a href="#" class="back-to-top">Back to Top</a>
+	
+    <div class="container">
+	
+		<!-- Modal - to show msg -->
+		<div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+			  <div class="modal-dialog">
+
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal" align="center">Close</button>
+				</div>
+			  </div>
+			  
+			</div>
+		</div>
+	
+		<div id="gamediv">
+			<script type="text/javascript">
+				insert();
+			</script>
+			<div id="load_jobid">
+				<input type="text" id="JobToLoadID" value="" placeholder="Enter your results ID"/>
+				<a href='' id="LoadJob_button" onclick="this.href='http://onetwotree.tau.ac.il/results.html?jobId='+document.getElementById('JobToLoadID').value+'&jobTitle=check'">Load previous results</a>
+
+				</div>
+		</div>
+	
+
+        <!-- Static navbar -->
+		 <ul class="header">
+		  <li class="header"><a class="header" href="index.html">Home</a></li>
+		  <li class="header"><a class="header" href="overview.html">Overview</a></li>
+		  <li class="header"><a class="header" href="openIssues.html">OpenIssues</a></li>
+		  <li class="header"><a class="header" href="download.html">Download</a></li>
+		  <li class="header"><a class="header" href="http://onetwotree.tau.ac.il/download/OTT_License.pdf">License</a></li>
+		  <li class="header"><a class="header" href="https://github.com/MayroseLab/OneTwoTree"><i class="fa fa-github">Github</i></a></li>
+		  <!--<li class="header"><a class="header" href="http://onetwotree.tau.ac.il/results.html?jobId=1510040551&jobTitle=Antirrhineae">Results</a></li>-->
+
+		  </ul>
+
+ 
+        <!-- jumbotron -->
+        <div class="jumbotron">
+
+
+			<!--<p align="center"><font size=35 color="#3C7A61"><b>OneTwoTree</b></font></p>-->
+		  <p><font size=4 color="#DB0400" align="center"><b>This is a beta version.</b></font></p>
+            <p>
+                <font color="#1A1818" size="3" align="center"> We are working on improving OneTwoTree for enhanced flexibility and a better user interface. 
+				<br>If you run into problems please email <a href="mailto:#"><i>evolseq@post.tau.ac.il</i></a> and specify the job ID.<br>
+				<!--<font color="#DB0400">Important notice: GUIDANCE is curently not functional on this site. We will update as soon as the problem is fixed.</font><br>-->
+                    <!--<br>If you haven't received any results within a few hours, please contact us and re-submit--> Thank you!
+                </font>
+            </p>
+			<br>
+			<!--<a class = "over_head">Overview</a>-->
+
+
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse0" class="over_head">
+        Updates and News</a>
+      </h4>
+    </div>
+    <div id="collapse0" class="panel-collapse collapse">
+      <div class="panel-body over_data" >Currently there are no updates.
+	  </div>
+    </div>
+  </div> 
+ <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse1" class="over_head">
+        Overview</a>
+      </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse in">
+      <div class="panel-body over_data" >OneTwoTree is an online tool designed to aid researchers with the task of phylogeny reconstruction. 
+	  OneTwoTree allows a fully automatic phylogeny reconstruction, while providing researchers with the ability to fine-tune various steps of the analysis. 
+	  Given a list of taxa names, OneTwoTree retrieves all sequence data available in <a href="https://www.ncbi.nlm.nih.gov/genbank/" target="_blank">NCBI GenBank</a> 
+	  for the requested taxa, regardless of which loci are available. Optionally, OneTwoTree can identify an appropriate outgroup to be included in the analysis. 
+	  A clustering procedure is then performed to assign sequences to orthology groups that form the basis for the subsequent alignment and tree reconstruction steps. 
+	  The user can obtain the list of sequence clusters or reconstruct the phylogeny using either maximum likelihood or Bayesian tools.  <!--LastUpdate 31Oct2017-->
+	  </div>
+    </div>
+  </div>
+  <!--<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse2" class="over_head">
+        Input</a>
+      </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body over_data">The sole input requirement for OneTwoTree is a list of taxa names to be analyzed. 
+	  Alternatively, NCBI TaxID (see explanation on <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/" target="_blank"> NCBI</a>), or a mixture of TaxId and taxa names can be given as input. 
+	  Currently, the input names must match exactly with the nomenclature of NCBI Taxonomy. The user can specify whether to include (1) hybrids (e.g., Iris brevicaulis x Iris fulva) 
+	  (2) intraspecific variants (e.g., Iris iberica subsp. elegantissima, or Iris kirkwoodiae var. macrotepala) or (3) open nomenclature (e.g., sp. aff., cf. etc.; Iris bulleyana f. alba) in their results. 
+	  Additionally, it is possible to merge the sequences of intraspecific variants with those of their progenitor species into a single taxon.
+	  </div>
+    </div>
+  </div>-->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse3" class="over_head"> <!--data-parent="#accordion"-->
+        Methodology</a>
+      </h4>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse">
+      <div class="panel-body over_data">The general pipeline is outlined in the following scheme and is briefly described below. Further details can be found in the manuscript.<br><br>
+	  <!--<IMG class="displayed" src="images/OverView_Diag.jpg"><br>-->
+	  <IMG class="displayed" src="images/Figure1.jpg"><br>
+	  * Asterisk indicates an optional stage, depending on user selection.<br><br>
+		
+		(1) <b> Input.</b> <br>
+		The sole input requirement for OneTwoTree is a list of taxa names to be analyzed. <br>
+		Alternatively, NCBI TaxID (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/" target="_blank">see explanation here</a>),
+		or a mixture of TaxId and taxa names can be given as input. To avoid server overload we limit jobs to a maximum of 10,000 taxa per analysis. Please contact us <a href="mailto:#"><i>(evolseq@post.tau.ac.il)</i></a>  
+		if you wish to conduct such an analysis.<br><br>
+		
+	  
+		(2) <b>Name resolution. </b><br>
+		OneTwoTree offers two types of name resolution processes that can be used to validate the list of taxa names provided by the user and to ensure consistent taxonomic reference across different databases:<br><br>
+		
+				<p class="tab"> a. Fuzzy matching. Choosing this option will correct for probable misspellings as well as 
+				differences in naming conventions (e.g., the replacement of Linaria peloponnesica  with Linaria peloponnesiaca) 
+				in comparison to the reference taxonomic database.<br><br></p>
+
+				<p class="tab"> b. Full name resolution. Choosing this option will perform fuzzy matching and additionally will match synonymous taxa names to their accepted ones (e.g., the replacement of Oenothera elata subsp.
+				hookeri with Oenothera elata subsp. elata). <br><br></p>
+			
+	
+		Both processes make use of the Taxonome tool (Kluyver & Osborne 2013). The underlying taxonomic database for names is user-specified, with NCBI Taxonomy being the default (Federhen 2011). 
+		Another database is The Plant List (<a href="http://www.theplantlist.org/" target="_blank">V1.1;</a>).We are currently working on adding the Catalogue of Life (Roskov Y., et al.2017) as an additional naming database. 
+		Using the fuzzy matching option, any sequence that shares the same TaxID as the input taxon will be retrieved, regardless if it is an accepted name or a synonym. In the second option, 
+		sequences belonging to any TaxID of the synonymy group (i.e., both the accepted name and all its synonyms) are retrieved and grouped under the TaxID of the accepted name. We note that using this option, 
+		two names provided by the user could be combined into a single TaxID if, for example, one is a synonymy of the other. When using non-NCBI naming database, 
+		sequences are retrieved only if their name is assigned as a "scientific name" in NCBI.<br><br>
+		
+		(3) <b>Sequence retrieval. </b><br>
+		
+		To enble efficient sequence data retrieval and rapid update upon new GenBank release, a local depository of NCBI GenBank (Benson et al. 2013) 
+		was downloaded for six Eukarya divisions including mammals (MAM), rodents (ROD), primates (PRI), plants (PLN), vertebrates (VRT), and invertebrates (INV).
+		All sequences are limited to be no longer than 100,000bp. Sequences with unknown TaxID were eliminated from the database. To further reduce data redundancy, 
+		sequences of the same TaxID sharing >98% identity were filtered using CD-hit (Li & Godzik 2006), leaving the longest as representative. TaxID with more than 1,000 sequences are separated from the pipeline (do not undergo the clustering process as detailed below; see (4) Clustering) <br> 
+		Given an input list of taxa names, all DNA sequences available in the local sequence repository are retrieved for the requested taxa. 
+		By default, the analysis is performed at the species level. Optionally, users can choose to include (1) hybrids (e.g., Iris brevicaulis x Iris fulva)
+		(2) intraspecific variants (e.g., Iris iberica subsp. elegantissima, or Iris kirkwoodiae var. macrotepala) or (3) open nomenclature 
+		(e.g., sp. aff., cf. etc.; Iris bulleyana f. alba). Regardless of any previous selection, users can request to unite all taxa below the species-level 
+		with their progenitor species into a single tip, whose name matches that of the binomial species. Notably, this step is performed following the sequence 
+		retrieval part and will thus not result in the retrieval of any additional accessions. Thus, for example, in case a subspecies is specified in the input list, 
+		but the species itself is missing, sequences will be retrieved only for the subspecies. The name on the phylogeny, however, will follow the merging command and 
+		will be that of the binomial species. In case a higher-ranked taxon that encompasses multiple species (e.g., a genus name) is specified, all circumscribed species 
+		are included in the analysis as separate entities and the various filters described above can be applied.  <br><br>	
+			
+		An additional filtering step allows users to specify the genome type from which sequences will be retrieved (any combination of the following):<br>
+			<p class="tab">a.Nuclear<br>
+			b.Mitochondria <br>
+			c.Chloroplast </p><br>
+			
+		We note that this filtering is applied after the clustering process (see below) which can result in a mixture of genome types (e.g., a chloroplast sequence that is clustered with nuclear sequences). 
+		The genome type of each cluster is defined according to the majority of the sequences within it.<br><br>
+		
+		
+		(4) <b>Clustering. </b><br>
+		Sequences are clustered into orthologous groups using several optional tools with OrthoMCL (Li et al. 2003) being the default. 
+		To avoid cases where a long sequence (e.g., the whole mitochondrial genome) is mapped to multiple clusters, the orthoMCL pipeline was adjusted such that the aligned 
+		region between all pairs obtained by BLAST all-vs-all is at least 50% of the size of either sequence. This overlap ratio threshold can be altered by the user. 
+		Users can additionally control the granularity of the resulting clusters by modifying the inflation parameter of orthoMCL (higher inflation index will result in tighter clusters; Li et al. 2003). 
+		In case multiple accessions per TaxID are found in a single cluster, a representative accession is selected by performing a BLAST all-vs-all among all of these accessions and 
+		choosing the one with the highest average bitscore. Clusters with exceedingly low taxon coverage (i.e., below 5 taxa per cluster) are filtered from subsequent steps.<br><br>
+		In case of TaxID with more than 1,000 sequences, this TaxID does not undergo the regular clustering process, i.e., after the clustering has been performed, the pipeline checks whether any of the >1,000 sequences
+		shares high similarity (based on blast Bitscore) with the clusters' sequence representative. If it does, these candidate sequences are added to the cluster.
+				
+		
+		Sequences belonging to the Internal Transcribed Spacer (ITS) region are clustered differently. The two ITS sequences, ITS1 and ITS2, are DNA regions located between structural ribosomal RNAs, 
+		and are one of the most widely-used phylogenetic markers. As these two distinct regions share high sequence similarity, clustering tools tend to mistakenly group them together, 
+		which could result in erroneous alignments. Therefore, OneTwoTree identifies ITS sequences based on their GenBank sequence descriptions using keyword matching. 
+		ITS sequences are then classified to three non-overlapping groups: (1) sequences containing only ITS1, (2) sequences containing only ITS2, and (3) sequences containing both. 
+		The combined group (no. 3) should contain at least 5 taxa to be included, in case of insufficient taxa coverage, each of the other groups (no.1 and no. 2) should maintain the same threshold 
+		in order for an ITS cluster to be included.  These sequences are then aligned using a 2-step alignment strategy: First, only the group of sequences containing both regions is aligned, 
+		thereby creating a backbone alignment. Then, ITS1 and ITS2 sequences are iteratively added to this backbone alignment using the --add-fragments option of MAFFT (Katoh & Standley 2013).<br><br>
+		
+		A header is given to each cluster based on the representative sequence of each cluster (this sequence is chosen based on a BLAST all-vs-all among all sequences within the cluster). 
+		The name will be assigned according to the list of genes the representative accession contains (as appears under the 'gene' feature in the GenBank file), and if missing, according to the description field. <br><br>
+
+
+		(5) <b>Outgroup.</b> <br>
+		Users can choose one out of three options:
+		<p class="tab">a. None – the analysis will be performed without assigning any of the taxa as outgroup.<br>
+						b.	User defined – the user can specify one of the input taxa to serve as the outgroup.<br>
+						c.	Automatic selection – selecting a single outgroup automatically by the pipeline. Note that an automatic outgroup selection substantially 
+						increases running times compared to the two other options.<br><br></p>
+		
+		In case users choose the automatic outgroup selection the following steps are being executed: (1) Identifying a list of potential outgroup sequences for each cluster, 
+		and (2) choosing a single outgroup that is compatible with the largest number of clusters. In the first step, for each cluster identified in the clustering step,
+		a representative sequence is selected (this sequence is selected by executing a BLAST all-vs-all among all sequences within the cluster and choosing the one with the highest average bitscore). 
+		This sequence is then used as the query in a subsequent BLAST search against the local sequence repository to locate potential outgroup sequences. The results of this BLAST search are filtered as follows: 
+		(a) the length of the outgroup sequence is at most twice that of the query sequence and at least half of its length; (b) the BLAST bitscore of a potential outgroup sequence should be lower 
+		than the bitscores received by all sequences belonging to the ingroup taxa; this condition verifies that the outgroup sequences are not nested within the ingroup taxa. Finally, 
+		given the list of at most 250 potential outgroup sequences per cluster, a single outgroup species is selected as the one with the highest sequence coverage 
+		(i.e., the coverage of each potential outgroup species is the sum of the sequence lengths of the clusters it corresponds to, weighted by the number of sequences in each cluster). <br><br>
+		
+		
+		(6) <b>Multiple sequence alignment (MSA).</b> <br>
+		Alignment for each cluster is performed using <a href="http://mafft.cbrc.jp/alignment/software/manual/manual.html" target="_blank">MAFFT v6.864b (Katoh & Standley 2013)</a> or 
+		<a href="http://computing.bio.cam.ac.uk/local/doc/clustalo.txt" target="_blank"> Clustal Omega</a> (Sievers et al. 2011). An MSA filtering process which removes poorly aligned 
+		sequences or positions is applied by default using <a href="http://trimal.cgenomics.org/use_of_the_command_line_trimal_v1.2" target="_blank"> trimAl v1.2rev59</a> (Capella-Gutiérrez et al. 2009; 
+		in this option user can specify the fraction of sequences with a gap allowed). Users can optionally alter the tool used and apply this process using <a href="http://guidance.tau.ac.il/ver2/overview.php" 
+		target="_blank"> GUIDANCE v1.41</a> (Penn, O. et al., 2010; removing sequences and positions with lower reliability scores than defined; using this option might slow OneTwoTree's performance significantly)
+		or <a href="http://molevol.cmima.csic.es/castresana/Gblocks.html" target="_blank"> Gblocks v0.91b </a> (Castresana, J., 2000). Once the MSAs of all clusters are computed, they are concatenated to form a single supermatrix. 
+		To reduce excessive computation time, the length of the final MSA is restricted to be no longer than 20,000 positions; the length of each cluster is represented by the median length of its sequences. 
+		In case the concatenation of all available clusters exceeds this limit, clusters are added iteratively such that at each step taxon coverage is maximized, until the MSA length threshold is reached. <br><br>
+		
+		
+		(7) <b>Phylogenetic reconstruction.</b> <br>
+		(7.1) Tool: According to user preference, a phylogenetic reconstruction procedure is performed using <a href="http://sco.h-its.org/exelixis/resource/download/NewManual.pdf" target="_blank">RAxML v8.2.4</a> 
+		(Stamatakis 2014) or <a href="https://github.com/stamatak/ExaML/blob/master/manual/ExaML.pdf" target="_blank">ExaML v3.0.17</a> (Kozlov et al. 2015) for Maximum Likelihood (ML) inference, 
+		or MrBayes v3.2.2 (Ronquist et al. 2012) for Bayesian inference: <br><br>
+			<p class="tab">a. RAxML. Possible substitution models include GTRCAT, GTRGAMMA, GTRCATI, GTRGAMMAI. 
+							Users can choose to add a rapid bootstrap estimation and specify the number of replicates. Choosing this option will substantially increase the running time.<br><br>
+							b. ExaML. Possible substitution models include the PSR and GAMMA. 
+							These are equivalent of the GTRCAT and GTRGAMMA models available in RAxML, respectively. Users can choose to add a rapid bootstrap estimation and specify the number of replicates. 
+							Choosing this option will substantially increase the running time.  <br><br>
+							c.MrBayes. User can choose an automatic selection of the best-fitted model for each locus using JmodelTest (Darriba et al. 2012). 
+							Additionally, several options for a clock model (unconstrained, strict, or relaxed) are supported. 
+							All models excluding the unconstrained model result in trees that are ultrametric. Other parameters that can be modified include number of MCMC generations, 
+							samplingfrequency, number of chains, burnin fraction, and frequency of checkpoints.</p><br>
+		(7.2) Tree type: Users can obtain a single phylogenetic tree inferred from the multi-loci concatenated MSA (͞supermatrix tree͟) or choose to infer one phylogeny per each of the available loci. <br>
+		(7.3) Divergence time estimation: Divergence time estimation (i.e., estimating branch lengths in units that are proportional to time) is available for rooted phylogenies inferred under both Bayesian and ML approaches. 
+		Choosing this option will result in trees that are ultrametric. Under the Bayesian framework, users should choose the strict model or one of the relaxed clock models. 
+		Under the ML framework, divergence time estimation is performed either by PLL-DPPDIV (Flouri & Stamatakis 2012; Heath et al. 2012) or treePL (Smith & O’Meara 2012). 
+		To perform time estimates, users should provide a set of calibration points (<a href="#NodalLink">see nodal constraints below</a>). 
+		In case none are provided, the tree will be calibrated relatively to a root age of 1. Note, that when using PLL-DPPDIV the outcome is a distribution of trees. 
+		Thus, TreeAnnotator, which is part of the BEAST package (Drummond & Rambaut 2007), is used to summarize these multiple trees into a single tree.   <br><br>
+		
+		(7.4) Constrained trees:  <br>
+			<p class="tab">  a. Topological constraints: In case of prior knowledge regarding the relationship between the taxa in question, one can apply a topological constraint by defining certain splits 
+								in the resulting phylogeny. Implemented both for ML and Bayesian inferences, users can add a topological constraint tree, in a NEWICK format (e.g.,: ((A,B),(C,D)); branch lengths are ignored; 
+								In this case taxa A and B are constrained to be more closely related to each other than either one is to C or D). When using this option with ExaML, all taxa should appear in the user-constraint tree, 
+								otherwise an unconstraint tree will be produced.<br>
+							b.  <a name="NodalLink">Nodal constraints:</a> Constraining the divergence-time of a certain ancestral node in the phylogeny allows branch-lengths calibration according to a time 
+							scale defined by the user. Usually, these time estimates are based on fossil data. In this case users should supply a split (i.e., two taxa names that the desired calibration point is their most recent common ancestor) 
+							together with two time estimations – minimal and maximal ages of the relative split (<a href=" http://OneTwoTree.tau.ac.il/download/input_examples/NodeDate_e.csv" target="_blank">example file</a>). 
+							Note that when using MrBayes as the phylogeny reconstruction tool, the use of the nodal constraint option is enabled only for clock models that support the uniform branch-length prior. 
+							For more complex options, users are advised to execute MrBayes offline on a local computer.</p><br><br>
+				
+				
+		
+		(8) <b>Re-run option.</b> <br>    In this step users can modify parts of the computation and re-run their analysis in two ways: (1) Alter clusters selection for the supermatrix, as well as the option to 
+		merge clusters together, and (2) choose a difference phylogeny reconstruction method.  <br><br>
+		
+		
+	  </div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse4" class="over_head">
+        Output</a>
+      </h4>
+    </div>
+    <div id="collapse4" class="panel-collapse collapse">
+      <div class="panel-body over_data">The output page presents the various input options of the specific runs. Once the analysis is completed, the following data are presented and are available for download:<br>
+		<p class="tab"> a.	The resulting phylogeny is presented online using the Wasabi viewer (Veidenberg et al. 2016) <br>
+						b.	The sequences belonging to each cluster can be downloaded either aligned or unaligned in a FASTA format. <br>
+						c.	AccessionsMatrix.csv. This spreadsheet summarizes the sequence data of the clustering step. The accession of each species included in each of the clusters are specified.<br>
+						d.  FinalSpeciesList.txt. This text file specifies the species that are included in the resulting tree. </p><br><br>
+	</div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse5" class="over_head">
+        Performance  </a>
+      </h4>
+    </div>
+    <div id="collapse5" class="panel-collapse collapse">
+      <div class="panel-body over_data">The OneTwoTree computational pipeline contains several time-limiting steps and may require long execution time. 
+	  Once users submit their job, an estimation of the overall process will be shown on the results page. Running times are affected by the size of the data input and by user preferences. 
+	  To estimate running times, the size of the data is approximated by the number of taxa and the total number of sequences. The main user preferences that affect running times are 
+	  concerned with the tree reconstruction method (ML vs. Bayesian) and whether an automatic outgroup detection is performed.<br>
+	  Running times are affected by the size of the data input and by user preferences. To estimate running times, the size of the data is approximated by the number of taxa and the total number of sequences. 
+	  The main user preferences that affect running times are concerned with the tree reconstruction method (ML vs. Bayesian) and whether an automatic outgroup detection is performed. <br>
+	  To estimate running time, a linear model was fitted based on the execution of a large number of OneTwoTree processes. A random set was generated by sampling 150 plant genera that varied 
+	  in their number of taxa (from 5 to 698) and number of sequences (12 to 7,631), which were used as explanatory features. To provide a more accurate estimation, 
+	  the linear model was fitted for each combination of outgroup choice ('Automatic selection' or 'User defined'/'none') and tree reconstruction tool (ML vs. Bayesian). 
+	  The ML runs were based on the performance of RAxML, which is used as an upper bound in case ExaML is chosen. When choosing to infer a phylogeny together with an MSA 
+	  filter or with bootstrap analysis a runtime estimation will not be provided. <br>
+	</div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse6" class="over_head">
+        References</a>
+      </h4>
+    </div>
+    <div id="collapse6" class="panel-collapse collapse">
+      <div class="panel-body over_data"><br>
+	    1. Capella-Gutiérrez, S., Silla-Martínez, J.M. & Gabaldón, T., 2009. trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses. Bioinformatics, 25(15), pp.1972–1973.<br>
+		2. Darriba, D. et al., 2012. jModelTest 2: more models, new heuristics and parallel computing. Nature methods, 9(8), p.772. <br>
+		3. Drummond, A.J. & Rambaut, A., 2007. BEAST: Bayesian evolutionary analysis by sampling trees. BMC evolutionary biology, 7(1), p.214. <br>
+		4. Federhen, S., 2011. The NCBI taxonomy database. Nucleic acids research, 40(D1), pp.D136–D143.<br>
+		5. Flouri, T. & Stamatakis, A., 2012. An improvement to DPPDIV. Heidelberg Institute for Theoretical Studies, Heidelberg, Germany, Exelixis-RRDR-2012-7. Available at http://sco. h-its. org/exelixis/pubs/Exelixis-RRDR-2012-7. pdf.<br>
+		6. Heath, T.A., Holder, M.T. & Huelsenbeck, J.P., 2012. A Dirichlet Process Prior for Estimating Lineage-Specific Substitution Rates. Molecular Biology and Evolution, 29(3), pp.939–955. <br>
+		Available at: https://academic.oup.com/mbe/article-lookup/doi/10.1093/molbev/msr255 [Accessed August 20, 2017].<br>
+		7. Katoh, K. & Standley, D.M., 2013. MAFFT multiple sequence alignment software version 7: 
+		improvements in performance and usability. Molecular biology and evolution, 30(4), pp.772–80. Available at: http://mbe.oxfordjournals.org/cgi/content/long/30/4/772 [Accessed July 13, 2014].<br>
+		8. Kluyver, T.A. & Osborne, C.P., 2013. Taxonome: a software package for linking biological species data. Ecology and Evolution, 3(5), pp.1262–1265. Available at: http://www.ncbi.nlm.nih.gov/pubmed/23762512. <br>
+		9. Kozlov, A.M., Aberer, A.J. & Stamatakis, A., 2015. ExaML version 3: a tool for phylogenomic analyses on supercomputers. Bioinformatics, p.btv184.<br>
+		10. Li, L., Stoeckert, C.J. & Roos, D.S., 2003. OrthoMCL: Identification of ortholog groups for eukaryotic genomes. Genome Research, 13(9), pp.2178–2189.<br>
+		11. Penn, O. et al., 2010. GUIDANCE: a web server for assessing alignment confidence scores. Nucleic acids research, 38(Web Server issue), pp.W23-8. Available at: http://nar.oxfordjournals.org/cgi/content/long/38/suppl_2/W23 [Accessed August 19, 2014]. <br>
+		12. Ronquist, F. et al., 2012. MrBayes 3.2: efficient Bayesian phylogenetic inference and model choice across a large model space. Systematic biology, 61(3), pp.539–42. Available at: http://sysbio.oxfordjournals.org/cgi/content/long/61/3/539 [Accessed July 10, 2014].<br>
+		13. Roskov Y., Abucay L., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., E., 2017. Catalogue of Life. Species 2000 & ITIS Catalogue of Life.<br>
+		14. Sievers, F. et al., 2011. Fast, scalable generation of high‐quality protein multiple sequence alignments using Clustal Omega. Molecular systems biology, 7(1), p.539. <br>
+		15. Smith, S.A. & O’Meara, B.C., 2012. treePL: divergence time estimation using penalized likelihood for large phylogenies. Bioinformatics, 28(20), pp.2689–2690. Available at: https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/bts492 [Accessed August 16, 2017]. <br>
+		16. Stamatakis, A., 2014. RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies. Bioinformatics, 30(9), pp.1312–1313.<br>
+		17. Veidenberg, A., Medlar, A. & Löytynoja, A., 2016. Wasabi: an integrated platform for evolutionary sequence analysis and data visualization. Molecular biology and evolution, 33(4), pp.1126–1130.<br>
+		18. Castresana, J., 2000. Selection of conserved blocks from multiple alignments for their use in phylogenetic analysis. Molecular biology and evolution, 17(4), pp.540-552.
+		
+
+<!--improvements in performance and usability. Molecular biology and evolution, 30(4), pp.772–80. Available at: http://mbe.oxfordjournals.org/cgi/content/long/30/4/772 [Accessed July 13, 2014]. Kluyver, T.A. & Osborne, C.P., 2013. Taxonome: a software package for linking biological species data. Ecology and Evolution, 3(5), pp.1262–1265. Available at: http://www.ncbi.nlm.nih.gov/pubmed/23762512. Kozlov, A.M., Aberer, A.J. & Stamatakis, A., 2015. ExaML version 3: a tool for phylogenomic analyses on supercomputers. Bioinformatics, p.btv184. Li, L., Stoeckert, C.J. & Roos, D.S., 2003. OrthoMCL: Identification of ortholog groups for eukaryotic genomes. Genome Research, 13(9), pp.2178–2189.Penn, O. et al., 2010. GUIDANCE: a web server for assessing alignment confidence scores. Nucleic acids research, 38(Web Server issue), pp.W23-8. Available at: http://nar.oxfordjournals.org/cgi/content/long/38/suppl_2/W23 [Accessed August 19, 2014]. Ronquist, F. et al., 2012. MrBayes 3.2: efficient Bayesian phylogenetic inference and model choice across a large model space. Systematic biology, 61(3), pp.539–42. Available at: http://sysbio.oxfordjournals.org/cgi/content/long/61/3/539 [Accessed July 10, 2014]. Roskov Y., Abucay L., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., E., 2017. Catalogue of Life. Species 2000 & ITIS Catalogue of Life. Sievers, F. et al., 2011. Fast, scalable generation of high‐quality protein multiple sequence alignments using Clustal Omega. Molecular systems biology, 7(1), p.539. Smith, S.A. & O’Meara, B.C., 2012. treePL: divergence time estimation using penalized likelihood for large phylogenies. Bioinformatics, 28(20), pp.2689–2690. Available at: https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/bts492 [Accessed August 16, 2017]. Stamatakis, A., 2014. RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies. Bioinformatics, 30(9), pp.1312–1313.Veidenberg, A., Medlar, A. & Löytynoja, A., 2016. Wasabi: an integrated platform for evolutionary sequence analysis and data visualization. Molecular biology and evolution, 33(4), pp.1126–1130.-->
+</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
+
+
+
+			
+		</div> <!-- jumbotron -->
+    </div> <!-- /container -->
+
+	
+
+
+	<br><br><br><br>
+	<link rel="shortcut icon" href="images/icon.jpg"/>
+	<script src="/js/googleAnalytics.js"></script>
+
+			<script>
+			$(document).ready(function(){
+			  $('.dropdown-submenu a.test').on("click", function(e){
+				$(this).next('ul').toggle();
+				e.stopPropagation();
+				e.preventDefault();
+			  });
+			});
+			</script>
+
+	<script type="text/javascript">
+		$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
+	</script>
+			
+</body>
+</html>

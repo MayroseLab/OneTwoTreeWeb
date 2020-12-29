@@ -1,0 +1,893 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style type="text/css">
+.zui-table-zebra tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+.zui-table-zebra tbody tr:nth-child(even) {
+    background-color: #EEF7EE;
+}
+</style>
+
+<style>
+
+.zui-table {
+    border: solid 1px #DDEEEE;
+    border-collapse: collapse;
+    border-spacing: 0;
+    #font: normal 14px Arial, sans-serif;
+    font: normal 15px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #DDEFEF;
+    border: solid 1px #DDEEEE;
+    color: #1d5b5b;
+    padding: 10px;
+    text-align: left;
+    text-shadow: 1px 1px 1px #fff;
+}
+.zui-table tbody td {
+    border: solid 1px #DDEEEE;
+    color: #333;
+    padding: 10px;
+    text-shadow: 1px 1px 1px #fff;
+}
+.zui-table-zebra tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+.zui-table-zebra tbody tr:nth-child(even) {
+    background-color: #EEF7EE;
+    #background-color: #ddf4eb;
+}
+.zui-table-horizontal tbody td {
+    border-left: none;
+    border-right: none;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+hr_sep {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+pInd {
+    text-indent: 50px;
+}
+
+IMG.displayed {
+    display: block;
+	max-width: 100%;
+    margin-left: auto;
+    margin-right: auto 
+	}
+
+.over_head {
+	font-family: "Georgia", Times, serif, bold;
+	font-size: 30px;
+	font-color: #41a6c1
+	text-align: center;
+	text-shadow: 0 0 3px white;
+	#background-color: #41a6c1;
+}
+
+.over_data {
+	font-family: "Georgia", Times, serif, bold;
+	font-size: 20px;
+	font-color: black
+	text-align: center;
+	#background-color: #41a6c1;
+}
+	
+ul.header {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li.header {
+    float: left;
+}
+
+li.header a, .dropbtn {
+    display: inline-block;
+	font-family: "Georgia", Times, serif;
+	font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li.header a:hover, .dropdown:hover .dropbtn {
+    background-color: #88c187;
+}
+
+ .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+<!--	p.dobline {
+<!--		border-style: double;
+<!--		border-width: thick;
+<!--	}
+<!--	p.dot {
+<!--	    border-style: dotted;
+<!--		border-width: 2px;
+<!--	}-->
+ 
+
+</style>
+
+<!-- Check multi Dropdown -->
+
+
+ 	<script type="text/javascript">
+        function insert(){
+            var src = document.getElementById("gamediv");
+            var img = document.createElement("img");
+            img.src = "images/OTT_Head3.jpg";
+            src.appendChild(img);
+        }
+	</script>
+	
+	
+
+	<!--script src="jquery.js"></script-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="shortcut icon" href="images/tree_1.jpg"/>
+
+    <title>OneTwoTree server</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.0.3/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="bootstrap-3.0.3/examples/navbar/navbar.css" rel="stylesheet">
+
+	<!-- dataTables is for a sortable table-->
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">	
+
+    <link rel="stylesheet" type="text/css" href="http://onetwotree.tau.ac.il/css/onetwotree.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
+	<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+	<script src="/jquery-csv-master/src/jquery.csv.js"></script>
+    <script src='js/purl.js'></script>
+	<!--script src="/js/oneTwoTree.js"></script-->
+	
+	
+	
+	<!-- dataTables is for a sortable table-->
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+	$(document).ready(function(){
+	
+	document.getElementById("JobToLoadID")
+		.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode == 13) {
+			document.getElementById("LoadJob_button").click();
+		}
+	});	
+
+	
+	$('ul.pagination li a').on('click', function(e) {
+		e.preventDefault();
+		var tag = $(this);
+		//alert(" click on " + tag.text());
+		document.getElementById('rerunOptions').value = tag.text();
+		if (tag.text() == 'Phylogeny'){
+			$("#divClustersTable").show();
+		}
+		else{
+			$("#divClustersTable").hide();
+		}
+	});
+
+	
+	if ($.url().param('jobId')){
+		document.getElementById('editBoxOriginJobID').value = $.url().param('jobId');
+		getJobData();
+		window.location = '#rerun';
+	}
+		
+
+    $('input[type=radio][name=rerunOptions]').change(function() {
+   
+		if (this.value == 'EditTaxa') 
+		{ 
+			$("#divClustersTable").hide();
+			$("#rooted").show();
+			$("#hr1").show();
+			$("#divAlignmentOptions").show();
+			$("#hr2").show();			
+			$("#divChooseGenome").show();
+			$("#hr3").show();
+			$("#divTreeMethod").show();
+		}
+		
+		if (this.value == 'Clustering') 
+		{ 
+			$("#divClustersTable").hide();
+			$("#rooted").hide();
+			$("#hr1").hide();			
+			$("#divAlignmentOptions").hide();
+			$("#hr2").hide();			
+			$("#divChooseGenome").show();
+			$("#hr3").show();			
+			$("#divTreeMethod").show();
+		}
+
+		if (this.value == 'Alignment') 
+		{
+			$("#divClustersTable").hide();
+			$("#rooted").hide();
+			$("#hr1").hide();			
+			$("#divAlignmentOptions").show();
+			$("#hr2").hide();			
+			$("#divChooseGenome").hide();
+			$("#hr3").hide();						
+			$("#divTreeMethod").hide();			
+		}
+		
+        if (this.value == 'Phylogeny') 
+		{
+			$("#divClustersTable").show();
+			$("#rooted").hide();
+			$("#hr1").hide();						
+			$("#divAlignmentOptions").hide();
+			$("#hr2").hide();									
+			$("#divChooseGenome").hide();
+			$("#hr3").hide();									
+			$("#divTreeMethod").show();
+        }
+		
+		
+	});
+
+		
+			$('#FilterMSA_Method').on('change', function() {
+			  if ( this.value == 'None')
+			  {
+				$("#divNone").show();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'GUIDANCE')
+			  {
+				
+   		        $('#myModal').find('.modal-header').html('<font color=red><b>GUIDANCE may slow OneTwoTree down<b><br></font>');
+				$('#myModal').find('.modal-body').html('<p>Running GUIDANCE may slow OneTwoTree down,<br>especially in case of large sets of sequences.<br>(Our default run does not include Guidance)</p>');
+				$("#myModal").modal();
+
+				//$('#FilterMSA_Method').confirmation();
+				$("#divNone").hide();
+				$("#divGUIDANCE").show();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'Trimal')
+			  {
+				$("#divNone").hide();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").show();
+				$("#divTrimal2").show();
+				$("#div_gBlocks1").hide();
+				$("#div_gBlocks2").hide();
+			  }
+
+			  if ( this.value == 'gBlocks')
+			  {
+				$("#divNone").hide();
+				$("#divGUIDANCE").hide();
+				$("#divTrimal1").hide();
+				$("#divTrimal2").hide();
+				$("#div_gBlocks1").show();
+				$("#div_gBlocks2").show();
+			  }
+
+			  });
+			
+			$('#MSA_Software').on('change', function() {
+			  if ( this.value == 'MAFFT')
+			  {
+				$("#divMAFFT1").show();
+				$("#divMAFFT2").show();
+				$("#divPRANK").hide();
+				$("#divClustalOmega").hide();
+			  }
+			  
+			  if ( this.value == 'PRANK')
+			  {
+				$("#divMAFFT1").hide();
+				$("#divMAFFT2").hide();
+				$("#divPRANK").show();
+				$("#divClustalOmega").hide();
+			  }
+			  
+			  if ( this.value == 'ClustalOmega')
+			  {
+				$("#divMAFFT1").hide();
+				$("#divMAFFT2").hide();
+				$("#divPRANK").hide();
+				$("#divClustalOmega").show();
+			  }
+			  
+			});
+						
+			$('#Tree_Method').on('change', function() {
+			  if ( this.value == 'MrBayes')
+			  {
+				$("#divModelChoiceAndNgen").show();
+				$("#divModelChoice").hide();
+				$("#divSelectMrBayes").show();				
+				$("#divSelectRAxML").hide();
+				$("#divSelectExaML").hide();
+			  }
+			  
+			  if ( this.value == 'RAxML')
+			  {
+				$("#divModelChoiceAndNgen").hide();
+				$("#divModelChoice").show();
+				$("#divSelectMrBayes").hide();				
+				$("#divSelectRAxML").show();
+				$("#divSelectExaML").hide();
+			  }
+			  
+			  if ( this.value == 'ExaML')
+			  {
+				$("#divModelChoiceAndNgen").hide();
+				$("#divModelChoice").show();
+				$("#divSelectMrBayes").hide();				
+				$("#divSelectRAxML").hide();
+				$("#divSelectExaML").show();
+			  }
+			  
+			});
+			
+			
+		$('#example').DataTable();
+		$('#myDataTable').DataTable();
+		
+		if ($('#myDataTable').height){console.log("myDataTable exists");}
+		else{console.log("myDataTable not exists");}
+		/*
+		$('#myDataTable').DataTable( {
+			paging:		false, 
+			info:		false,
+			searching:	false,
+
+			//add these config to remove empty header
+			"bJQueryUI":true,
+			"sDom": 'lfrtip',
+			"order": []
+			
+		} );*/
+		
+		
+		
+    $('#inputText').keyup(function(){
+		//document.getElementById('divClustersTable').empty();
+		$("#inputFile").val("");
+		//$("#editBoxOriginJobID").val("");
+	});
+
+		
+			
+});	// document ready end
+		
+        $(function () {
+            $("#popover1").popover();
+            $("#popover2").popover();
+            $("#popover3").popover();
+            $("#popover4").popover();
+            $("#popover5").popover();
+            $("#popover6").popover();
+            $("#popover7").popover();
+            $("#popover8").popover();
+            $("#popover9").popover();
+            $("#popover10").popover();
+            $("#popover11").popover();
+            $("#popover12").popover();
+
+        });
+
+        function myOnLoad(){
+        }
+		
+		
+		var amountScrolled = 300;
+		$(window).scroll(function() {
+		if ( $(window).scrollTop() > amountScrolled ) {
+			$('a.back-to-top').fadeIn('slow');
+		} else {
+			$('a.back-to-top').fadeOut('slow');
+		}
+	    });	
+			
+		
+		function validateForm(){	
+			// verify there is input
+			var file				= document.forms["myForm"]["inputFile"].value;
+			var txt					= document.forms["myForm"]["inputText"].value;
+			var clustersSelected	= $('#divClustersTable input:checked').length;
+		
+			if ( (file == "") && (txt == "") && (clustersSelected == 0) ) 
+			{
+   		        $('#myModal').find('.modal-header').html('<b>No input entered<b><br>');
+				$('#myModal').find('.modal-body').html('<p>Please,<br>select your FASTA file,<br>or type your list of taxa,<br>or select at least one cluster to re-run.</p>');
+				$("#myModal").modal();
+				return false;
+			}
+
+			// form has input. Do a trick to add unchecked checkboxes values to params.txt
+			if(document.getElementById("trustInserions").checked) {
+			    document.getElementById('trustInserions_hidden').disabled = true;
+			}
+
+			if(document.getElementById("include_Nuc").checked) {
+			    document.getElementById('include_Nuc_hidden').disabled = true;
+			}
+			
+			/*
+			if(document.getElementById("concatAll_Nuc").checked) {
+			    document.getElementById('concatAll_Nuc_hidden').disabled = true;
+			}
+			*/
+			
+			if(document.getElementById("include_Mt").checked) {
+			    document.getElementById('include_Mt_hidden').disabled = true;
+			}
+			
+			/*
+			if(document.getElementById("concatAll_Mt").checked) {
+			    document.getElementById('concatAll_Mt_hidden').disabled = true;
+			}
+			*/
+			
+			if(document.getElementById("include_CP").checked) {
+			    document.getElementById('include_CP_hidden').disabled = true;
+			}
+
+			/*
+			if(document.getElementById("concatAll_CP").checked) {
+			    document.getElementById('concatAll_CP_hidden').disabled = true;
+			}
+			*/
+			
+			// gblocks related
+			if(document.getElementById("gb_SmallerBlocks").checked) {
+			    document.getElementById('gb_SmallerBlocks_hidden').disabled = true;
+				document.getElementById("gb_SmallerBlocks").value = 'true';
+			}
+
+			if(document.getElementById("gb_AllowGaps").checked) {
+			    document.getElementById('gb_AllowGaps_hidden').disabled = true;
+				document.getElementById("gb_AllowGaps").value = 'true';				
+			}
+
+			if(document.getElementById("gb_LessStrictFlanking").checked) {
+			    document.getElementById('gb_LessStrictFlanking_hidden').disabled = true;
+				document.getElementById("gb_LessStrictFlanking").value = 'true';				
+			}
+			
+			if (document.getElementById('OriginJobID').value == "None"){
+				document.getElementById('OriginJobDir').value = "";
+			}
+			else{
+				document.getElementById('OriginJobDir').value = "/bioseq/data/results/oneTwoTree/" + document.getElementById('OriginJobID').value;			
+			}
+								
+			document.getElementById("date").value = new Date().toLocaleString();
+
+		}
+
+
+		
+		/*
+		// json - works ok:
+		var fnameJson = "http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/clusters.json";
+		console.log(fnameJson);
+		
+		var data = $.csv.toObjects(fnameJson);
+		console.log(data);
+		*/
+		
+		/*$.getJSON(fnameJson, function(json) {
+			console.log(json); // this will show the info it in firebug console
+		});*/
+	
+		
+		
+		
+
+// this func is called when user presses the re-run btn
+function getJobData(){
+	// init: clear div, get job num, clear choose file and load example
+	document.getElementById('divClustersTable').empty();
+	var userJobId = document.getElementById('editBoxOriginJobID').value;
+	$("#inputFile").val("");
+	$("#inputText").val("");
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/SummaryDir/All_Clusters_data.txt",
+		onSuccess:function(response){
+			console.log("getJobData onSuccess");
+			document.getElementById('OriginJobID').value = userJobId;
+			$("#divRerun").show();
+			$("#divRerunTxt").html("Re-run options for job " + userJobId + ":");
+			$("#divUplaodFile").hide();
+			$("#divOR").hide();
+			
+			// get csv data as objects
+			var data = $.csv.toObjects(response);
+			//console.log(data);
+			
+			// construct table
+			var html = '<div class="fontMedium">Check the clusters to re-run:</div>';
+			html += '<table id="myDataTable" name="myDataTable" class="table table-hover table-responsive table-bordered table-sm rerunTable">';
+			html += '<thead><tr><th><input type="checkbox" id="idSelectAll" onclick="onSelectAll()"> Cluster</th><th>Description</th><th>Type</th><th>Length</th><th>Num of species</th><th>Included</th></tr></thead>';
+			html += '<tbody>';
+			
+			for(var i in data){				
+				// skip non data rows - see in console
+				if (data[i].ClusterID === undefined){ continue; }
+
+				html += '<tr>';
+				html += '<td><input type="checkbox" name="cluster_' + data[i].ClusterID +'"> ' + data[i].ClusterID + '</td>';
+				html += '<td>' + data[i].Desc + '</td>';					
+				html += '<td>' + data[i].Type + '</td>';					
+				html += '<td>' + data[i].length + '</td>';					
+				html += '<td>' + data[i].SpeciesCnt + '</td>';					
+				//html += '<td>' + data[i].SpeciesIds + '</td>';
+				html += '<td>' + data[i].IncludedInConcat + '</td>';					
+				html += '<tr>';
+			}
+			
+			// close table tags
+			html += '</tbody>';
+			html += '</table>';
+			$('#divClustersTable').html(html);
+			
+			getRerunTaxaList();
+		},
+
+		onFailure:function(response){
+			console.log("getJobData onError");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+			$("#divUplaodFile").show();
+			$("#divOR").show();
+
+		}
+	}).send(); //Don't forget to send our request!
+	
+}
+
+
+// this func is called when user presses the re-run btn
+function getRerunTaxaList(){
+	var userJobId = document.getElementById('OriginJobID').value;
+	
+	// create ajax request, connect events to it, and send it
+	var ajaxRequest = new Request({
+		url:"http://onetwotree.tau.ac.il/oneTwoTree_results/" + userJobId + "/userInput.txt",
+		onSuccess:function(response){
+			console.log("getRerunTaxaList onSuccess");
+			$("#inputText").val(response);
+		},
+
+		onFailure:function(response){
+			console.log("getRerunTaxaList onFailure");
+			$('#myModal').find('.modal-header').html('<b>Result not found<b><br>');
+			$('#myModal').find('.modal-body').html('Sorry, taxa list for result ID "'  + userJobId + '" was not found.');
+			$("#myModal").modal();
+		}
+	}).send(); //Don't forget to send our request!
+	
+}
+
+	
+	function onChooseFile(){
+		document.getElementById('divClustersTable').empty();
+		document.getElementById('OriginJobID').value = "None";
+		$("#editBoxOriginJobID").val("");
+		$("#inputText").val("");
+		$("#divRerun").hide();
+	}
+	
+	function onSelectAll() {
+		// get state - checked or not?
+		var state = document.getElementById("idSelectAll").checked;
+		// set all checkboxes in div to state
+		$("#divClustersTable :checkbox").prop('checked', state);
+	}
+
+    </script>
+
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="http://bootstrap-confirmation.js.org/assets/js/docs.min.js"></script>
+  
+</head>
+
+<body onload="javascript:myOnLoad()">
+	
+	<a href="#" class="back-to-top">Back to Top</a>
+	
+    <div class="container">
+	
+		<!-- Modal - to show msg -->
+		<div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+			  <div class="modal-dialog">
+
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal" align="center">Close</button>
+				</div>
+			  </div>
+			  
+			</div>
+		</div>
+	
+		<div id="gamediv">
+			<script type="text/javascript">
+				insert();
+			</script>
+			<div id="load_jobid">
+				<input type="text" id="JobToLoadID" value="" placeholder="Enter your results ID"/>
+				<a href='' id="LoadJob_button" onclick="this.href='http://onetwotree.tau.ac.il/results.html?jobId='+document.getElementById('JobToLoadID').value+'&jobTitle=check'">Load previous results</a>
+
+				</div>
+		</div>
+	
+
+        <!-- Static navbar -->
+		 <ul class="header">
+		  <li class="header"><a class="header" href="index.html">Home</a></li>
+		  <li class="header"><a class="header" href="overview.html">Overview</a></li>
+		  <li class="header"><a class="header" href="openIssues.html">OpenIssues</a></li>
+		  <li class="header"><a class="header" href="download.html">Download</a></li>
+		  <li class="header"><a class="header" href="http://onetwotree.tau.ac.il/download/OTT_License.pdf">License</a></li>
+		  <li class="header"><a class="header" href="https://github.com/MayroseLab/OneTwoTree"><i class="fa fa-github">Github</i></a></li>
+		  <!--<li class="header"><a class="header" href="http://onetwotree.tau.ac.il/results.html?jobId=1510040551&jobTitle=Antirrhineae">Results</a></li>
+		  <!--<li class="header"><a class="header" href="results.html">Results</a></li>-->
+		  <!--<li class="dropdown">
+		  <!--  <a href="javascript:void(0)" class="dropbtn">Dropdown</a>
+		  <!--  <div class="dropdown-content">
+		  <!--    <a href="#">Link 1</a>
+		  <!--    <a href="#">Link 2</a>
+		  <!--    <a href="#">Link 3</a>
+		  <!--  </div>
+		  <!--</li>-->
+		</ul>
+
+        <!--<div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10" align=center><h1 class="small">OneTwoTree</h1></div>/
+            <div align=center><h1 class="small">OneTwoTree</h1></div>
+            <div class="col-md-1"></div>
+        </div>a-->
+
+        <!-- jumbotron -->
+        <div class="jumbotron">
+
+
+
+			<!--<p align="center"><font size=35 color="#3C7A61"><b>OneTwoTree</b></font></p>-->
+            <p><font size=4 color="#DB0400" align="center"><b>This is a beta version.</b></font></p>
+           <p>
+                <font color="#1A1818" size="3" align="center"> We are working on improving OneTwoTree for enhanced flexibility and a better user interface. 
+				<br>If you run into problems please email <a href="mailto:#"><i>evolseq@tauex.tau.ac.il</i></a> and specify the job ID.<br>
+				<!--<font color="#DB0400">Important notice: GUIDANCE is curently not functional on this site. We will update as soon as the problem is fixed.</font><br>-->
+                    <!--<br>If you haven't received any results within a few hours, please contact us and re-submit--> Thank you!
+                </font>
+            </p>
+
+			<!--<a class = "over_head">Overview</a>-->
+
+            <p><font size=5 color="#1f331e" align="center" font-weight="bold";>
+			The following table contains all future improvements and issues we are aware of and intend to fix. <br>
+			If you encounter any other malfunction please send us an Email to <a href="mailto:#"><i>evolseq@tauex.tau.ac.il</i></a>.
+			</font></p>
+			
+<table class="zui-table zui-table-zebra zui-table-horizontal">
+    <thead>
+        <tr>
+            <th>Issue#</th>
+            <th>topic</th>
+			<th>description</th>            
+            <th>Status</th>
+         </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>User sequences input</td>
+            <td>Enable users to add their own sequences to the analysis</td>
+            <td>Open</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Name resolution databases</td>
+            <td>Add Catalog of life to be one of the DB options for Name resolution</td>
+            <td>Open</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Stand alone version</td>
+            <td>Create a stand-alone version of OneTwoTree.</td>
+            <td>V 1.1</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Running time improvment</td>
+            <td>Improve running time of outgroup selection</td>
+            <td>Open</td>
+        </tr>
+         <tr>
+            <td>5</td>
+            <td>Input/ouput taxa statistics</td>
+            <td>Add statistics of input/output (user inputed vs final data)</td>
+            <td>Open</td>
+        </tr>
+         <tr>
+            <td>6</td>
+            <td>Multiple outgroup</td>
+            <td>Add user option to select multiple outgroups</td>
+            <td>Open</td>
+        </tr> 
+        <tr>
+            <td>7</td>
+            <td>Update Genbank</td>
+            <td>Update local database from genbank (NCBI)</td>
+            <td>Last Updated: Sep 2019</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Remove rogue taxa using RougeNaRok</td>
+            <td>Add an option to remove form the tree species whose position is highly uncertain</td>
+            <td>Open</td>
+        </tr>
+        <!--tr>
+            <td>9</td>
+            <td>Cluster Selection options</td>
+            <td>Include an option to determine the order of clusters added to the concatanated alignment. <br>
+			Two options are offered (1) Maximize data per taxon and (2) Optimize taxa coverage.</td>
+            <td>V 1.2</td>
+        </tr-->
+        <tr>
+            <td>10</td>
+            <td>ITS clusters included in Outgroup selection process</td>
+            <td>Bug fixed. ITS clusters are now part of the outgroup selection process </td>
+            <td>V 1.2</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>Bug: OTT failed when ITS1 had only one sequence.</td>
+            <td>Bug was fixed.</td>
+            <td>V 1.2</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Bug: OTT failed when job name included '-'.</td>
+            <td>Bug was fixed.</td>
+            <td>V 1.2</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>Bug: Orthomcl clustering with no results (no clusters found) caused failure</td>
+            <td>Bug was fixed.</td>
+            <td>V 1.2</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>ITS clusteing </td>
+            <td>Perfrom clustering also on ITS sequences, rather than assigning them to ITS clusters<br>
+			based on the textual description in the sequence header. </td>
+            <td>V 1.2</td>
+        </tr>	
+    </tbody>
+</table>
+
+			
+
+
+
+
+
+<!-- &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
+
+
+
+			
+		</div> <!-- jumbotron -->
+    </div> <!-- /container -->
+
+	
+
+
+	<br><br><br><br>
+	<link rel="shortcut icon" href="images/icon.jpg"/>
+	<script src="/js/googleAnalytics.js"></script>
+
+			<script>
+			$(document).ready(function(){
+			  $('.dropdown-submenu a.test').on("click", function(e){
+				$(this).next('ul').toggle();
+				e.stopPropagation();
+				e.preventDefault();
+			  });
+			});
+			</script>
+
+	<script type="text/javascript">
+		$('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
+	</script>
+			
+</body>
+</html>

@@ -1,0 +1,26 @@
+Running options:phylogeny reconstruction 
+Submitted at:4/19/2017, 10:52:26 AM 
+
+
+Rerun:None 
+Outgroup selection:Single 
+Clustering options: 
+Sequence ratio cutoff:0.5 
+Orthomcl Inflation Index:1.5 
+MSA software:MAFFT 
+Max iterations:0 
+Pairwise alignment method:MAFFT_6mer 
+MSA filter:None 
+
+Exclude Species Options:
+Include Hybrids:on 
+Include SubSp:on 
+Include Unresolved:on 
+
+Genome:
+Include Nucleus:on 
+Include Mitochondrial:on 
+Include Chloroplast:on 
+Phylogeny inference tool:RAxML 
+Model choice:GTRCAT 
+Email:michal.md75@gmail.com 
